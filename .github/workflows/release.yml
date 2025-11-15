@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for OIDC authentication to npm
+      contents: write  # Required for creating GitHub releases
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        registry-url: 'https://registry.npmjs.org'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run tests
+      run: npm test
+    
+    - name: Run linter
+      run: npm run lint
+    
+    - name: Build package
+      run: npm run build
+    
+    - name: Publish to npm
+      run: npm publish --provenance --access public
+    
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: IterFlow ${{ github.ref }}
+        body: |
+          Release notes for IterFlow ${{ github.ref }}
+          
+          See [CHANGELOG.md](https://github.com/gv-sh/iterflow/blob/main/CHANGELOG.md) for details.
+        draft: false
+        prerelease: false

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2025-11-15
+
+### Security
+
+- Replaced npm token authentication with npm Trusted Publishing using OIDC
+- Updated GitHub Actions workflows to use secure token-free publishing
+- Added provenance generation for published packages
+
+### Changed
+
+- Updated VERSION_WORKFLOW.md with npm Trusted Publishing documentation
+- Removed dependency on NPM_TOKEN secrets in CI/CD pipelines
+
 ## [0.1.1] - 2025-11-15
 
 ### Added

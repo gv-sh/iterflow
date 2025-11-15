@@ -101,15 +101,15 @@ git push origin main
 git push origin --tags
 ```
 
-### 8. GitHub Release
-1. Go to https://github.com/gv-sh/iterflow/releases
-2. Click "Create a new release"
-3. Select the version tag (e.g., `v0.2.0`)
-4. Release title: `IterFlow v0.2.0`
-5. Copy changelog content to release description
-6. Click "Publish release"
+### 8. npm Publishing (Automated via GitHub Actions)
 
-### 9. npm Publishing
+IterFlow uses **npm Trusted Publishing** with OpenID Connect (OIDC) for secure automated publishing. This eliminates the need for storing sensitive npm tokens.
+
+#### Automated Publishing Triggers
+- **Tag-based releases**: Creating a git tag triggers automatic publishing
+- **Main branch updates**: Automatic publishing if version in package.json differs from npm
+
+#### Manual Publishing (if needed)
 ```bash
 # Verify package contents
 npm pack --dry-run
@@ -120,10 +120,24 @@ mkdir test-iterflow && cd test-iterflow
 npm init -y
 npm install /path/to/iterflow
 
-# Publish to npm
+# Manual publish (requires npm Trusted Publishing setup)
 cd /path/to/iterflow
-npm publish
+npm publish --provenance --access public
 ```
+
+### 9. GitHub Release
+After pushing the tag, the automated release workflow will:
+1. Run all tests and build checks
+2. Publish to npm with provenance
+3. Create a GitHub release automatically
+
+You can also create releases manually:
+1. Go to https://github.com/gv-sh/iterflow/releases
+2. Click "Create a new release"
+3. Select the version tag (e.g., `v0.2.0`)
+4. Release title: `IterFlow v0.2.0`
+5. Copy changelog content to release description
+6. Click "Publish release"
 
 ### 10. Verify Release
 - Check npm: https://www.npmjs.com/package/iterflow
@@ -183,36 +197,47 @@ npm publish --tag beta
 # npm install iterflow@beta
 ```
 
-## Automation (Future Enhancement)
+## npm Trusted Publishing Setup
 
-Consider setting up automated releases:
+IterFlow uses npm Trusted Publishing with OIDC for secure, token-free automated publishing.
 
-### GitHub Actions Release Workflow
+### Initial Setup (One-time Configuration)
+
+#### 1. Configure npm Trusted Publishing
+1. Go to https://www.npmjs.com/package/iterflow/access
+2. Click "Publishing access" tab
+3. Click "Add a Trusted Publisher"
+4. Select "GitHub Actions"
+5. Fill in the configuration:
+   - **Repository**: `gv-sh/iterflow`
+   - **Workflow filename**: `release.yml` (or `ci.yml`)
+   - **Job**: `release` (or `publish`)
+
+#### 2. Verify GitHub Actions Configuration
+The workflows are already configured with:
 ```yaml
-name: Release
-
-on:
-  push:
-    tags:
-      - 'v*'
-
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+permissions:
+  id-token: write  # Required for OIDC authentication
 ```
+
+And publishing with provenance:
+```yaml
+- name: Publish to npm
+  run: npm publish --provenance --access public
+```
+
+### Automated Release Workflows
+
+#### Tag-based Releases (`.github/workflows/release.yml`)
+- Triggered when pushing git tags (e.g., `v1.2.3`)
+- Runs full test suite
+- Publishes to npm with provenance
+- Creates GitHub release automatically
+
+#### CI-based Publishing (`.github/workflows/ci.yml`)  
+- Triggered on main branch pushes
+- Only publishes if package.json version differs from npm
+- Provides continuous deployment for version updates
 
 ## Version History Tracking
 
