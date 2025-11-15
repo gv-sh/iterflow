@@ -1,0 +1,75 @@
+{
+  "name": "iterflow",
+  "version": "0.1.0",
+  "description": "Extended iterator utilities for ES2022+ with forward compatibility for ES2025",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./fn": {
+      "types": "./dist/fn/index.d.ts",
+      "import": "./dist/fn/index.js",
+      "require": "./dist/fn/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "docs": "typedoc src/index.ts",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "iterator",
+    "iterable",
+    "helpers",
+    "utilities",
+    "es2022",
+    "typescript",
+    "functional",
+    "statistics",
+    "windowing",
+    "lazy"
+  ],
+  "author": {
+    "name": "Gaurav Singh",
+    "email": "hi@gvsh.cc",
+    "url": "https://github.com/gv-sh"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gv-sh/iterflow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gv-sh/iterflow/issues"
+  },
+  "homepage": "https://github.com/gv-sh/iterflow#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^2.1.9",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "tsup": "^8.0.0",
+    "typedoc": "^0.26.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^2.0.0"
+  }
+}
