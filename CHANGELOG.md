@@ -5,59 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.6] - 2025-11-15
-
-### Fixed
-
-- Corrected npm Trusted Publishing setup in CI workflow
-
-## [0.1.5] - 2025-11-15
-
-### Fixed
-
-- Fix publishing workflow
-
-
-## [0.1.4] - 2025-11-15
-
-### Fixed
-
-- Resolved npm Trusted Publishing configuration issues
-- Fixed job name matching between CI workflow and npm publisher settings
-- Corrected publishing workflow authentication
-
-## [0.1.3] - 2025-11-15
-
-### Security
-
-- Replaced npm token authentication with npm Trusted Publishing using OIDC
-- Updated GitHub Actions workflows to use secure token-free publishing
-- Added provenance generation for published packages
-
-### Changed
-
-- Updated CI workflow to publish only from main branch
-- Removed tag-based release workflow in favor of version-based publishing
-- Updated VERSION_WORKFLOW.md with npm Trusted Publishing documentation
-- Removed dependency on NPM_TOKEN secrets in CI/CD pipelines
-
-### Added
-
-- Created NPM_SETUP.md with step-by-step Trusted Publishing configuration guide
-
-## [0.1.2] - 2025-11-15
-
-### Internal
-
-- Version prepared for npm Trusted Publishing transition (not published)
-
-## [0.1.1] - 2025-11-15
-
-### Added
-
-- Added missing `NPM_TOKEN` secret to GitHub Actions for publishing releases.
-
-## [0.1.0] - 2025-11-15
 
 ### Added
 

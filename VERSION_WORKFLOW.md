@@ -101,15 +101,20 @@ git push origin main
 git push origin --tags
 ```
 
-### 8. GitHub Release
-1. Go to https://github.com/gv-sh/iterflow/releases
-2. Click "Create a new release"
-3. Select the version tag (e.g., `v0.2.0`)
-4. Release title: `IterFlow v0.2.0`
-5. Copy changelog content to release description
-6. Click "Publish release"
+### 8. npm Publishing (Automated via GitHub Actions)
 
-### 9. npm Publishing
+Publishing to npm happens automatically when you push to main branch with a new version in package.json.
+
+#### Prerequisites
+1. **NPM_TOKEN secret** must be configured in GitHub repository secrets
+2. **Package version** in package.json must be different from current npm version
+
+#### Automated Publishing Process
+- **Triggers**: Push to main branch with version change
+- **Workflow**: `.github/workflows/publish.yml` runs automatically
+- **Authentication**: Uses NPM_TOKEN secret for secure publishing
+
+#### Manual Publishing (if needed)
 ```bash
 # Verify package contents
 npm pack --dry-run
@@ -120,10 +125,18 @@ mkdir test-iterflow && cd test-iterflow
 npm init -y
 npm install /path/to/iterflow
 
-# Publish to npm
+# Manual publish (if automation fails)
 cd /path/to/iterflow
-npm publish
+npm publish --access public
 ```
+
+### 9. GitHub Release
+1. Go to https://github.com/gv-sh/iterflow/releases
+2. Click "Create a new release"
+3. Select the version tag (e.g., `v0.2.0`)
+4. Release title: `IterFlow v0.2.0`
+5. Copy changelog content to release description
+6. Click "Publish release"
 
 ### 10. Verify Release
 - Check npm: https://www.npmjs.com/package/iterflow
@@ -183,36 +196,20 @@ npm publish --tag beta
 # npm install iterflow@beta
 ```
 
-## Automation (Future Enhancement)
+## Automated Publishing Setup
 
-Consider setting up automated releases:
+IterFlow uses GitHub Actions for automated npm publishing.
 
-### GitHub Actions Release Workflow
-```yaml
-name: Release
+### Current Setup
+The `.github/workflows/publish.yml` workflow automatically:
+1. **Runs tests and builds** on every push to main
+2. **Publishes to npm** when package.json version differs from npm
+3. **Uses NPM_TOKEN** for secure authentication
 
-on:
-  push:
-    tags:
-      - 'v*'
-
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-```
+### Required Configuration
+1. **NPM_TOKEN secret** - see `NPM_SETUP.md` for setup instructions
+2. **Workflow file** - already configured in `.github/workflows/publish.yml`
+3. **Package permissions** - ensure npm token has publish access to iterflow package
 
 ## Version History Tracking
 

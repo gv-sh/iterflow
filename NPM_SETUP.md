@@ -1,41 +1,37 @@
-# npm Trusted Publishing Setup
+# npm Token Setup
 
-This document provides the one-time setup steps required to enable secure, token-free publishing for the IterFlow package.
+This document provides the setup steps required to enable npm publishing for the IterFlow package using NPM_TOKEN authentication.
 
-## Setup Steps on npmjs.org
+## Setup Steps
 
-### 1. Access Publishing Settings
-1. Go to https://www.npmjs.com/package/iterflow/access
-2. Make sure you're logged in with publish permissions for the iterflow package
+### 1. Generate npm Access Token
+1. Go to https://www.npmjs.com/settings/tokens
+2. Click **"Generate New Token"**
+3. Select **"Granular Access Token"** (recommended) or **"Classic Token"**
+4. Configure token permissions:
+   - **Package**: `iterflow`
+   - **Permission**: `publish` (read/write)
+   - **Expiration**: Set appropriate expiration date
 
-### 2. Configure Trusted Publisher
-1. Click on the **"Publishing access"** tab
-2. Click **"Add a trusted publisher"**
-3. Select **"GitHub Actions"** as the publisher type
-
-### 3. Fill in Configuration Details
-```
-Repository: gv-sh/iterflow
-Workflow filename: ci.yml
-Job: publish
-```
-
-### 4. Save Configuration
-Click **"Add trusted publisher"** to save the configuration.
+### 2. Add Token to GitHub Secrets
+1. Go to https://github.com/gv-sh/iterflow/settings/secrets/actions
+2. Click **"New repository secret"**
+3. Name: `NPM_TOKEN`
+4. Value: Paste the npm token generated in step 1
+5. Click **"Add secret"**
 
 ## What This Enables
 
-- **Secure Publishing**: No npm tokens stored in GitHub secrets
-- **OIDC Authentication**: Uses OpenID Connect for secure authentication
-- **Provenance Generation**: Cryptographic proof of package authenticity
+- **Secure Publishing**: npm token stored securely in GitHub secrets
 - **Automatic Publishing**: Publishes when version in package.json changes on main branch
+- **Access Control**: Token has limited scope to iterflow package only
 
 ## How It Works
 
 1. When you push to main branch with a new version in package.json
-2. GitHub Actions runs the CI workflow
-3. The `publish` job authenticates to npm using OIDC
-4. Package is published with provenance if version differs from npm
+2. GitHub Actions runs the publish workflow
+3. The `publish` job uses the NPM_TOKEN secret to authenticate
+4. Package is published if version differs from npm
 
 ## Verification
 
@@ -46,9 +42,9 @@ After setup, you can verify by:
 3. Check GitHub Actions logs for successful publish
 4. Verify package on https://www.npmjs.com/package/iterflow
 
-## Security Benefits
+## Security Considerations
 
-- **No stored secrets**: Eliminates risk of token compromise
-- **Short-lived authentication**: OIDC tokens are temporary
-- **Provenance tracking**: Cryptographic attestation of build process
-- **Audit trail**: Clear link between GitHub commits and published packages
+- **Token rotation**: Regularly rotate npm tokens for security
+- **Minimal permissions**: Use granular access tokens with publish-only permissions
+- **Secure storage**: GitHub secrets are encrypted and only accessible to workflows
+- **Audit trail**: All publishes are logged in GitHub Actions and npm
