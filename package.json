@@ -1,6 +1,6 @@
 {
   "name": "iterflow",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Extended iterator utilities for ES2022+ with forward compatibility for ES2025",
   "type": "module",
   "main": "./dist/index.cjs",
