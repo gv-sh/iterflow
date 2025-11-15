@@ -419,7 +419,7 @@ We welcome contributions! Please see our [contributing guidelines](CONTRIBUTING.
 
 ## License
 
-MIT © Gaurav Singh
+MIT
 
 ## Changelog
 
