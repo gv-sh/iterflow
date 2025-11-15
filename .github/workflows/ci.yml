@@ -46,6 +46,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      id-token: write  # Required for OIDC authentication to npm
     
     steps:
     - uses: actions/checkout@v4
@@ -66,7 +68,5 @@ jobs:
     - name: Publish to npm (if version changed)
       run: |
         if [ "$(npm view iterflow version)" != "$(node -p "require('./package.json').version")" ]; then
-          npm publish
+          npm publish --provenance --access public
         fi
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
