@@ -1,7 +1,7 @@
 {
   "name": "iterflow",
   "version": "0.1.7",
-  "description": "Extended iterator utilities for ES2022+ with forward compatibility for ES2025",
+  "description": "Powerful iterator utilities for ES2022+ with statistical operations, windowing, and lazy evaluation. Forward compatible with ES2025 iterator helpers.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -37,11 +37,21 @@
     "helpers",
     "utilities",
     "es2022",
+    "es2025",
     "typescript",
     "functional",
     "statistics",
     "windowing",
-    "lazy"
+    "lazy",
+    "stream",
+    "pipeline",
+    "data-processing",
+    "collection",
+    "aggregation",
+    "mean",
+    "median",
+    "variance",
+    "tree-shakeable"
   ],
   "author": {
     "name": "Gaurav Singh",
