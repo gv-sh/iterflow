@@ -1,6 +1,6 @@
 # IterFlow
 
-Extended iterator utilities for ES2022+ with statistical, windowing, and functional operations. Designed to complement native ES2025 iterator helpers when available.
+Powerful iterator utilities for ES2022+ with statistical operations, windowing, and lazy evaluation. Forward compatible with ES2025 iterator helpers.
 
 [![npm version](https://badge.fury.io/js/iterflow.svg)](https://www.npmjs.com/package/iterflow)
 [![CI](https://github.com/gv-sh/iterflow/workflows/CI/badge.svg)](https://github.com/gv-sh/iterflow/actions)
@@ -8,6 +8,37 @@ Extended iterator utilities for ES2022+ with statistical, windowing, and functio
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![Tree Shakeable](https://img.shields.io/badge/Tree%20Shakeable-Yes-green.svg)](https://webpack.js.org/guides/tree-shaking/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Table of Contents
+
+- [Why IterFlow?](#why-iterflow)
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [API Overview](#api-overview)
+- [Statistical Operations](#statistical-operations)
+- [Windowing Operations](#windowing-operations)
+- [Grouping and Partitioning](#grouping-and-partitioning)
+- [Set Operations](#set-operations)
+- [Combining Iterators](#combining-iterators)
+- [Utility Operations](#utility-operations)
+- [Generator Functions](#generator-functions)
+- [Advanced Examples](#advanced-examples)
+- [TypeScript Support](#typescript-support)
+- [Performance](#performance)
+- [Browser Support](#browser-support)
+
+## Why IterFlow?
+
+IterFlow extends JavaScript's native iterators with powerful operations missing from the standard library:
+
+- **Statistical operations** - Calculate mean, median, variance, percentiles directly on data streams
+- **Memory efficient** - Process large datasets or infinite sequences without loading everything into memory
+- **Type-safe** - Full TypeScript support with intelligent type inference throughout method chains
+- **Composable** - Chain operations naturally with both wrapper and functional styles
+- **Future-proof** - Designed to complement ES2025 iterator helpers, not replace them
+
+Whether you're processing time-series data, analyzing datasets, or building data pipelines, IterFlow provides the missing pieces for elegant, efficient JavaScript.
 
 ## Features
 
