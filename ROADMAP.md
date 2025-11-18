@@ -15,14 +15,14 @@
 - [x] `includes()` - Check if value exists in iterator
 
 ### Additional Transformation Operations
-- [ ] `flatMap()` - Add missing functional API implementation (exists in wrapper API only)
-- [ ] `concat()` - Concatenate multiple iterators sequentially
-- [ ] `intersperse()` - Insert separator element between each item
-- [ ] `scan()` - Like reduce but emit all intermediate accumulator values
-- [ ] `enumerate()` - Add index as tuple with each element `[index, value]`
-- [ ] `reverse()` - Reverse iterator order (requires buffering)
-- [ ] `sort()` - Sort elements using default comparison
-- [ ] `sortBy()` - Sort elements using custom comparison function
+- [x] `flatMap()` - Add missing functional API implementation (exists in wrapper API only)
+- [x] `concat()` - Concatenate multiple iterators sequentially
+- [x] `intersperse()` - Insert separator element between each item
+- [x] `scan()` - Like reduce but emit all intermediate accumulator values
+- [x] `enumerate()` - Add index as tuple with each element `[index, value]`
+- [x] `reverse()` - Reverse iterator order (requires buffering)
+- [x] `sort()` - Sort elements using default comparison
+- [x] `sortBy()` - Sort elements using custom comparison function
 
 ### Interleaving Operations
 - [x] `interleave()` - Alternate elements from multiple iterators
