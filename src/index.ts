@@ -285,22 +285,6 @@ export namespace iter {
         }
 
         // Helper to maintain min-heap property
-        const bubbleUp = (index: number) => {
-          while (index > 0) {
-            const parentIndex = Math.floor((index - 1) / 2);
-            if (
-              compareFn(heap[index]!.value, heap[parentIndex]!.value) >= 0
-            ) {
-              break;
-            }
-            [heap[index], heap[parentIndex]] = [
-              heap[parentIndex]!,
-              heap[index]!,
-            ];
-            index = parentIndex;
-          }
-        };
-
         const bubbleDown = (index: number) => {
           const length = heap.length;
           while (true) {
