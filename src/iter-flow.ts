@@ -672,7 +672,7 @@ export class IterFlow<T> implements Iterable<T> {
    * ```typescript
    * iter(['alice', 'bob', 'charlie', 'dave'])
    *   .groupBy(name => name.length);
-   * // Map { 3 => ['bob'], 5 => ['alice', 'dave'], 7 => ['charlie'] }
+   * // Map { 3 => ['bob'], 5 => ['alice'], 7 => ['charlie'], 4 => ['dave'] }
    * ```
    */
   groupBy<K>(keyFn: (value: T) => K): Map<K, T[]> {
