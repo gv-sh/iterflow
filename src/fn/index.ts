@@ -636,6 +636,271 @@ export function toArray<T>(iterable: Iterable<T>): T[] {
   return Array.from(iterable);
 }
 
+/**
+ * Creates a curried function that reduces an iterable to a single value.
+ * Returns a function that takes an iterable and returns the reduced value.
+ *
+ * @template T The type of elements in the iterable
+ * @template U The type of the accumulated value
+ * @param fn - Function to combine the accumulator with each element
+ * @param initial - The initial value for the accumulator
+ * @returns A function that reduces an iterable
+ * @example
+ * ```typescript
+ * const sumAll = reduce((acc: number, x: number) => acc + x, 0);
+ * sumAll([1, 2, 3, 4]); // 10
+ * const concat = reduce((acc: string, x: string) => acc + x, '');
+ * concat(['a', 'b', 'c']); // 'abc'
+ * ```
+ */
+export function reduce<T, U>(
+  fn: (accumulator: U, value: T) => U,
+  initial: U,
+): (iterable: Iterable<T>) => U {
+  return function (iterable: Iterable<T>): U {
+    let accumulator = initial;
+    for (const value of iterable) {
+      accumulator = fn(accumulator, value);
+    }
+    return accumulator;
+  };
+}
+
+/**
+ * Creates a curried function that finds the first element matching a predicate.
+ * Returns a function that takes an iterable and returns the first matching element or undefined.
+ *
+ * @template T The type of elements
+ * @param predicate - Function to test each element
+ * @returns A function that finds an element in an iterable
+ * @example
+ * ```typescript
+ * const findGreaterThanThree = find((x: number) => x > 3);
+ * findGreaterThanThree([1, 2, 3, 4, 5]); // 4
+ * findGreaterThanThree([1, 2, 3]); // undefined
+ * ```
+ */
+export function find<T>(
+  predicate: (value: T) => boolean,
+): (iterable: Iterable<T>) => T | undefined {
+  return function (iterable: Iterable<T>): T | undefined {
+    for (const value of iterable) {
+      if (predicate(value)) {
+        return value;
+      }
+    }
+    return undefined;
+  };
+}
+
+/**
+ * Creates a curried function that finds the index of the first element matching a predicate.
+ * Returns a function that takes an iterable and returns the index or -1.
+ *
+ * @template T The type of elements
+ * @param predicate - Function to test each element
+ * @returns A function that finds an index in an iterable
+ * @example
+ * ```typescript
+ * const findIndexGreaterThanThree = findIndex((x: number) => x > 3);
+ * findIndexGreaterThanThree([1, 2, 3, 4, 5]); // 3
+ * findIndexGreaterThanThree([1, 2, 3]); // -1
+ * ```
+ */
+export function findIndex<T>(
+  predicate: (value: T) => boolean,
+): (iterable: Iterable<T>) => number {
+  return function (iterable: Iterable<T>): number {
+    let index = 0;
+    for (const value of iterable) {
+      if (predicate(value)) {
+        return index;
+      }
+      index++;
+    }
+    return -1;
+  };
+}
+
+/**
+ * Creates a curried function that tests if any element matches a predicate.
+ * Returns a function that takes an iterable and returns a boolean.
+ *
+ * @template T The type of elements
+ * @param predicate - Function to test each element
+ * @returns A function that tests an iterable
+ * @example
+ * ```typescript
+ * const hasGreaterThanThree = some((x: number) => x > 3);
+ * hasGreaterThanThree([1, 2, 3, 4, 5]); // true
+ * hasGreaterThanThree([1, 2, 3]); // false
+ * ```
+ */
+export function some<T>(
+  predicate: (value: T) => boolean,
+): (iterable: Iterable<T>) => boolean {
+  return function (iterable: Iterable<T>): boolean {
+    for (const value of iterable) {
+      if (predicate(value)) {
+        return true;
+      }
+    }
+    return false;
+  };
+}
+
+/**
+ * Creates a curried function that tests if all elements match a predicate.
+ * Returns a function that takes an iterable and returns a boolean.
+ *
+ * @template T The type of elements
+ * @param predicate - Function to test each element
+ * @returns A function that tests an iterable
+ * @example
+ * ```typescript
+ * const allEven = every((x: number) => x % 2 === 0);
+ * allEven([2, 4, 6]); // true
+ * allEven([1, 2, 3]); // false
+ * ```
+ */
+export function every<T>(
+  predicate: (value: T) => boolean,
+): (iterable: Iterable<T>) => boolean {
+  return function (iterable: Iterable<T>): boolean {
+    for (const value of iterable) {
+      if (!predicate(value)) {
+        return false;
+      }
+    }
+    return true;
+  };
+}
+
+/**
+ * Gets the first element from an iterable.
+ *
+ * @template T The type of elements
+ * @param iterable - The iterable to get the first element from
+ * @param defaultValue - Optional default value to return if iterable is empty
+ * @returns The first element, the default value, or undefined if empty and no default
+ * @example
+ * ```typescript
+ * first([1, 2, 3]); // 1
+ * first([]); // undefined
+ * first([], 0); // 0
+ * ```
+ */
+export function first<T>(
+  iterable: Iterable<T>,
+  defaultValue?: T,
+): T | undefined {
+  const iterator = iterable[Symbol.iterator]();
+  const result = iterator.next();
+  return result.done ? defaultValue : result.value;
+}
+
+/**
+ * Gets the last element from an iterable.
+ *
+ * @template T The type of elements
+ * @param iterable - The iterable to get the last element from
+ * @param defaultValue - Optional default value to return if iterable is empty
+ * @returns The last element, the default value, or undefined if empty and no default
+ * @example
+ * ```typescript
+ * last([1, 2, 3]); // 3
+ * last([]); // undefined
+ * last([], 0); // 0
+ * ```
+ */
+export function last<T>(iterable: Iterable<T>, defaultValue?: T): T | undefined {
+  let lastValue: T | undefined = defaultValue;
+  let hasValue = false;
+  for (const value of iterable) {
+    lastValue = value;
+    hasValue = true;
+  }
+  return hasValue ? lastValue : defaultValue;
+}
+
+/**
+ * Creates a curried function that gets the element at a specified index.
+ * Returns a function that takes an iterable and returns the element or undefined.
+ *
+ * @template T The type of elements
+ * @param index - Zero-based index of the element to retrieve
+ * @returns A function that gets an element from an iterable
+ * @example
+ * ```typescript
+ * const getSecond = nth(2);
+ * getSecond([1, 2, 3, 4, 5]); // 3
+ * getSecond([1, 2]); // undefined
+ * nth(-1)([1, 2, 3]); // undefined
+ * ```
+ */
+export function nth<T>(index: number): (iterable: Iterable<T>) => T | undefined {
+  return function (iterable: Iterable<T>): T | undefined {
+    if (index < 0) {
+      return undefined;
+    }
+    let currentIndex = 0;
+    for (const value of iterable) {
+      if (currentIndex === index) {
+        return value;
+      }
+      currentIndex++;
+    }
+    return undefined;
+  };
+}
+
+/**
+ * Checks if an iterable is empty.
+ *
+ * @template T The type of elements
+ * @param iterable - The iterable to check
+ * @returns true if the iterable has no elements, false otherwise
+ * @example
+ * ```typescript
+ * isEmpty([]); // true
+ * isEmpty([1, 2, 3]); // false
+ * ```
+ */
+export function isEmpty<T>(iterable: Iterable<T>): boolean {
+  const iterator = iterable[Symbol.iterator]();
+  const result = iterator.next();
+  return result.done === true;
+}
+
+/**
+ * Creates a curried function that checks if an iterable includes a specific value.
+ * Uses strict equality (===) for comparison.
+ * Returns a function that takes an iterable and returns a boolean.
+ *
+ * @template T The type of elements
+ * @param searchValue - The value to search for
+ * @returns A function that checks if an iterable includes the value
+ * @example
+ * ```typescript
+ * const includesThree = includes(3);
+ * includesThree([1, 2, 3, 4, 5]); // true
+ * includesThree([1, 2, 4]); // false
+ * includes('b')(['a', 'b', 'c']); // true
+ * ```
+ */
+export function includes<T>(
+  searchValue: T,
+): (iterable: Iterable<T>) => boolean {
+  return function (iterable: Iterable<T>): boolean {
+    for (const value of iterable) {
+      if (value === searchValue) {
+        return true;
+      }
+    }
+    return false;
+  };
+}
+
 // Combining operations
 /**
  * Combines two iterables into an iterator of tuples.
