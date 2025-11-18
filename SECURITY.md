@@ -10,11 +10,11 @@ We actively support the following versions with security updates:
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in IterFlow, please report it privately by:
+If you discover a security vulnerability in iterflow, please report it privately by:
 
 1. **Email:** Send details to hi@gvsh.cc
 2. **GitHub:** Use the private vulnerability reporting feature
-3. **Subject:** Include "IterFlow Security" in the subject line
+3. **Subject:** Include "iterflow Security" in the subject line
 
 ### What to Include
 
@@ -32,7 +32,7 @@ Please provide:
 
 ### Security Best Practices
 
-When using IterFlow:
+When using iterflow:
 
 - Keep dependencies up to date
 - Validate inputs when processing untrusted data
@@ -47,8 +47,8 @@ When using IterFlow:
 - Consider streaming alternatives for very large data processing
 
 ### Input Validation
-- IterFlow does not perform input validation beyond TypeScript type checking
-- Validate untrusted input before passing to IterFlow operations
+- iterflow does not perform input validation beyond TypeScript type checking
+- Validate untrusted input before passing to iterflow operations
 - Be cautious with user-provided functions (predicates, mappers, etc.)
 
 ### Known Limitations
@@ -62,4 +62,4 @@ When using IterFlow:
 - Credit will be given to reporters unless anonymity is requested
 - We follow responsible disclosure practices
 
-Thank you for helping keep IterFlow secure!
+Thank you for helping keep iterflow secure!

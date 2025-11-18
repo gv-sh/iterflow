@@ -1,6 +1,6 @@
-# IterFlow Examples
+# iterflow Examples
 
-Practical examples demonstrating IterFlow's capabilities.
+Practical examples demonstrating iterflow's capabilities.
 
 ## Running Examples
 

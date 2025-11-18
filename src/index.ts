@@ -1,12 +1,12 @@
 import { IterFlow } from "./iter-flow.js";
 
 /**
- * Creates an IterFlow instance from an iterable.
+ * Creates an iterflow instance from an iterable.
  * This is the main entry point for working with iterables in a fluent API style.
  *
  * @template T The type of elements in the iterable
  * @param source - The iterable to wrap
- * @returns A new IterFlow instance
+ * @returns A new iterflow instance
  * @example
  * ```typescript
  * iter([1, 2, 3, 4, 5])
@@ -29,7 +29,7 @@ export namespace iter {
    * @template U The type of elements in the second iterable
    * @param iter1 - The first iterable
    * @param iter2 - The second iterable
-   * @returns A new IterFlow of tuples pairing elements from both iterables
+   * @returns A new iterflow of tuples pairing elements from both iterables
    * @example
    * ```typescript
    * iter.zip([1, 2, 3], ['a', 'b', 'c']).toArray();
@@ -69,7 +69,7 @@ export namespace iter {
    * @param iter1 - The first iterable
    * @param iter2 - The second iterable
    * @param fn - Function to combine elements from both iterables
-   * @returns A new IterFlow with combined results
+   * @returns A new iterflow with combined results
    * @example
    * ```typescript
    * iter.zipWith([1, 2, 3], [10, 20, 30], (a, b) => a + b).toArray();
@@ -92,7 +92,7 @@ export namespace iter {
    * - range(start, stop, step): generates [start, stop) with custom step
    *
    * @param stop - The end value (exclusive) when called with one argument
-   * @returns A new IterFlow of numbers
+   * @returns A new iterflow of numbers
    * @throws {Error} If step is zero
    * @example
    * ```typescript
@@ -108,7 +108,7 @@ export namespace iter {
    *
    * @param start - The starting value (inclusive)
    * @param stop - The end value (exclusive)
-   * @returns A new IterFlow of numbers
+   * @returns A new iterflow of numbers
    */
   export function range(start: number, stop: number): IterFlow<number>;
   /**
@@ -117,7 +117,7 @@ export namespace iter {
    * @param start - The starting value (inclusive)
    * @param stop - The end value (exclusive)
    * @param step - The increment between values
-   * @returns A new IterFlow of numbers
+   * @returns A new iterflow of numbers
    */
   export function range(
     start: number,
@@ -158,7 +158,7 @@ export namespace iter {
    * @template T The type of the value to repeat
    * @param value - The value to repeat
    * @param times - Optional number of times to repeat (infinite if omitted)
-   * @returns A new IterFlow repeating the value
+   * @returns A new iterflow repeating the value
    * @example
    * ```typescript
    * iter.repeat('x', 3).toArray(); // ['x', 'x', 'x']
@@ -188,7 +188,7 @@ export namespace iter {
    *
    * @template T The type of elements in all iterables
    * @param iterables - Variable number of iterables to interleave
-   * @returns A new IterFlow with elements from all iterables interleaved
+   * @returns A new iterflow with elements from all iterables interleaved
    * @example
    * ```typescript
    * iter.interleave([1, 2, 3], [4, 5, 6]).toArray();
@@ -229,7 +229,7 @@ export namespace iter {
    * @template T The type of elements in all iterables
    * @param iterables - Variable number of sorted iterables to merge
    * @param compareFn - Optional comparison function (returns negative if a < b, positive if a > b, 0 if equal)
-   * @returns A new IterFlow with all elements merged in sorted order
+   * @returns A new iterflow with all elements merged in sorted order
    * @example
    * ```typescript
    * iter.merge([1, 3, 5], [2, 4, 6]).toArray();
@@ -363,7 +363,7 @@ export namespace iter {
    *
    * @template T The type of elements in all iterables
    * @param iterables - Variable number of iterables to chain
-   * @returns A new IterFlow with all elements chained sequentially
+   * @returns A new iterflow with all elements chained sequentially
    * @example
    * ```typescript
    * iter.chain([1, 2], [3, 4], [5, 6]).toArray();

@@ -11,10 +11,10 @@ git init
 git add .
 
 # Initial commit
-git commit -m "feat: initial release of IterFlow v0.1.0
+git commit -m "feat: initial release of iterflow v0.1.0
 
 - Complete statistical operations suite
-- Windowing and grouping operations  
+- Windowing and grouping operations
 - TypeScript type constraints
 - Dual API support (wrapper + functional)
 - Comprehensive test coverage"
@@ -98,7 +98,7 @@ npm publish
 ### 8. GitHub Release
 1. Create a new release on GitHub
 2. Tag: `v0.1.0`
-3. Release title: `IterFlow v0.1.0 - Initial Release`
+3. Release title: `iterflow v0.1.0 - Initial Release`
 4. Copy changelog content for release notes
 5. Attach build artifacts if needed
 
