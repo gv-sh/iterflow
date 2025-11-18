@@ -21,6 +21,7 @@ Powerful iterator utilities for ES2022+ with statistical operations, windowing, 
 - [Grouping and Partitioning](#grouping-and-partitioning)
 - [Set Operations](#set-operations)
 - [Combining Iterators](#combining-iterators)
+- [Interleaving Operations](#interleaving-operations)
 - [Utility Operations](#utility-operations)
 - [Generator Functions](#generator-functions)
 - [Advanced Examples](#advanced-examples)
@@ -255,6 +256,47 @@ Combines two iterators using a custom function:
 iter.zipWith([1, 2, 3], [4, 5, 6], (a, b) => a + b)
   .toArray();
 // [5, 7, 9]
+```
+
+## Interleaving Operations
+
+### Interleave
+
+Alternates elements from multiple iterators in a round-robin fashion:
+
+```typescript
+iter.interleave([1, 2, 3], [4, 5, 6])
+  .toArray();
+// [1, 4, 2, 5, 3, 6]
+
+iter.interleave([1, 2], [3, 4, 5], [6])
+  .toArray();
+// [1, 3, 6, 2, 4, 5]
+```
+
+### Merge
+
+Merges multiple sorted iterators while maintaining sort order:
+
+```typescript
+iter.merge([1, 3, 5], [2, 4, 6])
+  .toArray();
+// [1, 2, 3, 4, 5, 6]
+
+// With custom comparator for descending order
+iter.merge((a, b) => b - a, [9, 5, 1], [10, 6, 2])
+  .toArray();
+// [10, 9, 6, 5, 2, 1]
+```
+
+### Chain
+
+Chains multiple iterators sequentially, one after another:
+
+```typescript
+iter.chain([1, 2], [3, 4], [5, 6])
+  .toArray();
+// [1, 2, 3, 4, 5, 6]
 ```
 
 ## Utility Operations

@@ -25,9 +25,9 @@
 - [ ] `sortBy()` - Sort elements using custom comparison function
 
 ### Interleaving Operations
-- [ ] `interleave()` - Alternate elements from multiple iterators
-- [ ] `merge()` - Merge sorted iterators maintaining sort order
-- [ ] `chain()` - Chain iterators sequentially (similar to concat but different API)
+- [x] `interleave()` - Alternate elements from multiple iterators
+- [x] `merge()` - Merge sorted iterators maintaining sort order
+- [x] `chain()` - Chain iterators sequentially (similar to concat but different API)
 
 ### Advanced Statistical Operations
 - [ ] `mode()` - Find most frequent value(s) in dataset

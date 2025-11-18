@@ -1271,3 +1271,183 @@ export function repeat<T>(value: T, times?: number): IterableIterator<T> {
     }
   })();
 }
+
+// Interleaving operations
+/**
+ * Alternates elements from multiple iterables in a round-robin fashion.
+ * Continues until all iterables are exhausted.
+ *
+ * @template T The type of elements in all iterables
+ * @param iterables - Variable number of iterables to interleave
+ * @returns An iterable iterator with elements from all iterables interleaved
+ * @example
+ * ```typescript
+ * Array.from(interleave([1, 2, 3], [4, 5, 6]));
+ * // [1, 4, 2, 5, 3, 6]
+ * Array.from(interleave([1, 2], [3, 4, 5], [6]));
+ * // [1, 3, 6, 2, 4, 5]
+ * ```
+ */
+export function interleave<T>(
+  ...iterables: Iterable<T>[]
+): IterableIterator<T> {
+  return (function* (): IterableIterator<T> {
+    if (iterables.length === 0) return;
+
+    const iterators = iterables.map((it) => it[Symbol.iterator]());
+    const active = new Set(iterators);
+
+    while (active.size > 0) {
+      for (const iterator of iterators) {
+        if (!active.has(iterator)) continue;
+
+        const result = iterator.next();
+        if (result.done) {
+          active.delete(iterator);
+        } else {
+          yield result.value;
+        }
+      }
+    }
+  })();
+}
+
+/**
+ * Merges multiple sorted iterables into a single sorted iterator.
+ * Assumes input iterables are already sorted in ascending order.
+ * Uses a custom comparator if provided, otherwise uses default < comparison.
+ *
+ * @template T The type of elements in all iterables
+ * @param iterables - Variable number of sorted iterables to merge
+ * @returns An iterable iterator with all elements merged in sorted order
+ * @example
+ * ```typescript
+ * Array.from(merge([1, 3, 5], [2, 4, 6]));
+ * // [1, 2, 3, 4, 5, 6]
+ * Array.from(merge([1, 5, 9], [2, 6, 10], [3, 7, 11]));
+ * // [1, 2, 3, 5, 6, 7, 9, 10, 11]
+ * ```
+ */
+export function merge<T>(...iterables: Iterable<T>[]): IterableIterator<T>;
+export function merge<T>(
+  compareFn: (a: T, b: T) => number,
+  ...iterables: Iterable<T>[]
+): IterableIterator<T>;
+export function merge<T>(
+  ...args:
+    | [Iterable<T>[], ...Iterable<T>[]]
+    | [(a: T, b: T) => number, ...Iterable<T>[]]
+): IterableIterator<T> {
+  let compareFn: (a: T, b: T) => number;
+  let iterables: Iterable<T>[];
+
+  // Check if first argument is a function (comparator)
+  if (typeof args[0] === "function") {
+    compareFn = args[0] as (a: T, b: T) => number;
+    iterables = args.slice(1) as Iterable<T>[];
+  } else {
+    // Default comparator for numbers/strings
+    compareFn = (a: T, b: T) => {
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    };
+    iterables = args as Iterable<T>[];
+  }
+
+  return (function* (): IterableIterator<T> {
+    if (iterables.length === 0) return;
+
+    // Initialize all iterators with their first value
+    const heap: Array<{
+      value: T;
+      iterator: Iterator<T>;
+      index: number;
+    }> = [];
+
+    for (let i = 0; i < iterables.length; i++) {
+      const iterator = iterables[i]![Symbol.iterator]();
+      const result = iterator.next();
+      if (!result.done) {
+        heap.push({ value: result.value, iterator, index: i });
+      }
+    }
+
+    // Helper to maintain min-heap property
+    const bubbleDown = (index: number) => {
+      const length = heap.length;
+      while (true) {
+        let smallest = index;
+        const leftChild = 2 * index + 1;
+        const rightChild = 2 * index + 2;
+
+        if (
+          leftChild < length &&
+          compareFn(heap[leftChild]!.value, heap[smallest]!.value) < 0
+        ) {
+          smallest = leftChild;
+        }
+
+        if (
+          rightChild < length &&
+          compareFn(heap[rightChild]!.value, heap[smallest]!.value) < 0
+        ) {
+          smallest = rightChild;
+        }
+
+        if (smallest === index) break;
+
+        [heap[index], heap[smallest]] = [heap[smallest]!, heap[index]!];
+        index = smallest;
+      }
+    };
+
+    // Build initial heap
+    for (let i = Math.floor(heap.length / 2) - 1; i >= 0; i--) {
+      bubbleDown(i);
+    }
+
+    // Extract minimum and refill from same iterator
+    while (heap.length > 0) {
+      const { value, iterator } = heap[0]!;
+      yield value;
+
+      const result = iterator.next();
+      if (result.done) {
+        // Remove this iterator from heap
+        heap[0] = heap[heap.length - 1]!;
+        heap.pop();
+        if (heap.length > 0) {
+          bubbleDown(0);
+        }
+      } else {
+        // Replace with next value from same iterator
+        heap[0]!.value = result.value;
+        bubbleDown(0);
+      }
+    }
+  })();
+}
+
+/**
+ * Chains multiple iterables sequentially, one after another.
+ * Yields all elements from the first iterable, then all from the second, etc.
+ *
+ * @template T The type of elements in all iterables
+ * @param iterables - Variable number of iterables to chain
+ * @returns An iterable iterator with all elements chained sequentially
+ * @example
+ * ```typescript
+ * Array.from(chain([1, 2], [3, 4], [5, 6]));
+ * // [1, 2, 3, 4, 5, 6]
+ * Array.from(chain([1], [2, 3], [], [4, 5, 6]));
+ * // [1, 2, 3, 4, 5, 6]
+ * ```
+ */
+export function chain<T>(...iterables: Iterable<T>[]): IterableIterator<T> {
+  return (function* (): IterableIterator<T> {
+    for (const iterable of iterables) {
+      yield* iterable;
+    }
+  })();
+}
