@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve IterFlow
+about: Create a report to help us improve iterflow
 title: '[BUG] '
 labels: bug
 assignees: ''
@@ -34,7 +34,7 @@ A clear and concise description of what you expected to happen.
 A clear and concise description of what actually happened.
 
 ## Environment
-- IterFlow version: [e.g. 0.1.0]
+- iterflow version: [e.g. 0.1.0]
 - Node.js version: [e.g. 20.1.0]
 - TypeScript version: [e.g. 5.6.0]
 - Operating System: [e.g. macOS 14.0]

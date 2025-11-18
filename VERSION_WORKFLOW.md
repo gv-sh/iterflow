@@ -1,6 +1,6 @@
 # Version Update Workflow
 
-This document outlines the process for releasing new versions of IterFlow.
+This document outlines the process for releasing new versions of iterflow.
 
 ## Semantic Versioning
 
@@ -134,7 +134,7 @@ npm publish --access public
 1. Go to https://github.com/gv-sh/iterflow/releases
 2. Click "Create a new release"
 3. Select the version tag (e.g., `v0.2.0`)
-4. Release title: `IterFlow v0.2.0`
+4. Release title: `iterflow v0.2.0`
 5. Copy changelog content to release description
 6. Click "Publish release"
 
@@ -198,7 +198,7 @@ npm publish --tag beta
 
 ## Automated Publishing Setup
 
-IterFlow uses GitHub Actions for automated npm publishing.
+iterflow uses GitHub Actions for automated npm publishing.
 
 ### Current Setup
 The `.github/workflows/publish.yml` workflow automatically:

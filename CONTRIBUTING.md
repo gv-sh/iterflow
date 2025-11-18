@@ -1,6 +1,6 @@
-# Contributing to IterFlow
+# Contributing to iterflow
 
-Thank you for your interest in contributing to IterFlow! We welcome contributions from the community.
+Thank you for your interest in contributing to iterflow! We welcome contributions from the community.
 
 ## Development Setup
 

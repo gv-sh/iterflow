@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import { iter } from '../src/index.js';
 
-describe('IterFlow Basic Tests', () => {
+describe('iterflow Basic Tests', () => {
   describe('Factory function', () => {
-    it('should create IterFlow from array', () => {
+    it('should create iterflow from array', () => {
       const flow = iter([1, 2, 3]);
       expect(flow.toArray()).toEqual([1, 2, 3]);
     });
 
-    it('should create IterFlow from Set', () => {
+    it('should create iterflow from Set', () => {
       const flow = iter(new Set([1, 2, 3]));
       expect(flow.toArray()).toEqual([1, 2, 3]);
     });

@@ -1,6 +1,6 @@
 # npm Token Setup
 
-This document provides the setup steps required to enable npm publishing for the IterFlow package using NPM_TOKEN authentication.
+This document provides the setup steps required to enable npm publishing for the iterflow package using NPM_TOKEN authentication.
 
 ## Setup Steps
 

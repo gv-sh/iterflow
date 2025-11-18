@@ -15,7 +15,7 @@ export class IterFlow<T> implements Iterable<T> {
   private source: Iterator<T>;
 
   /**
-   * Creates a new IterFlow instance from an iterable or iterator.
+   * Creates a new iterflow instance from an iterable or iterator.
    *
    * @param source - The source iterable or iterator to wrap
    * @example
@@ -31,8 +31,8 @@ export class IterFlow<T> implements Iterable<T> {
 
   // Iterator protocol
   /**
-   * Returns the iterator for this IterFlow instance.
-   * This allows IterFlow to be used in for...of loops.
+   * Returns the iterator for this iterflow instance.
+   * This allows iterflow to be used in for...of loops.
    *
    * @returns The underlying iterator
    */
@@ -55,7 +55,7 @@ export class IterFlow<T> implements Iterable<T> {
    *
    * @template U The type of the transformed elements
    * @param fn - Function to transform each element
-   * @returns A new IterFlow with transformed elements
+   * @returns A new iterflow with transformed elements
    * @example
    * ```typescript
    * iter([1, 2, 3]).map(x => x * 2).toArray(); // [2, 4, 6]
@@ -77,7 +77,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Only elements for which the predicate returns true are included.
    *
    * @param predicate - Function to test each element
-   * @returns A new IterFlow with only elements that pass the predicate
+   * @returns A new iterflow with only elements that pass the predicate
    * @example
    * ```typescript
    * iter([1, 2, 3, 4]).filter(x => x % 2 === 0).toArray(); // [2, 4]
@@ -100,7 +100,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Takes only the first `limit` elements from the iterator.
    *
    * @param limit - Maximum number of elements to take
-   * @returns A new IterFlow with at most `limit` elements
+   * @returns A new iterflow with at most `limit` elements
    * @example
    * ```typescript
    * iter([1, 2, 3, 4, 5]).take(3).toArray(); // [1, 2, 3]
@@ -124,7 +124,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Skips the first `count` elements from the iterator.
    *
    * @param count - Number of elements to skip
-   * @returns A new IterFlow without the first `count` elements
+   * @returns A new iterflow without the first `count` elements
    * @example
    * ```typescript
    * iter([1, 2, 3, 4, 5]).drop(2).toArray(); // [3, 4, 5]
@@ -151,7 +151,7 @@ export class IterFlow<T> implements Iterable<T> {
    *
    * @template U The type of elements in the resulting iterator
    * @param fn - Function that maps each element to an iterable
-   * @returns A new IterFlow with all mapped iterables flattened
+   * @returns A new iterflow with all mapped iterables flattened
    * @example
    * ```typescript
    * iter([1, 2, 3]).flatMap(x => [x, x * 2]).toArray(); // [1, 2, 2, 4, 3, 6]
@@ -173,7 +173,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Yields all elements from this iterator, then from each provided iterator.
    *
    * @param iterables - Additional iterables to concatenate
-   * @returns A new IterFlow with all elements from all iterables
+   * @returns A new iterflow with all elements from all iterables
    * @example
    * ```typescript
    * iter([1, 2]).concat([3, 4], [5, 6]).toArray();
@@ -197,7 +197,7 @@ export class IterFlow<T> implements Iterable<T> {
    * The separator is not added before the first element or after the last.
    *
    * @param separator - The element to insert between items
-   * @returns A new IterFlow with separators interspersed
+   * @returns A new iterflow with separators interspersed
    * @example
    * ```typescript
    * iter([1, 2, 3]).intersperse(0).toArray();
@@ -229,7 +229,7 @@ export class IterFlow<T> implements Iterable<T> {
    * @template U The type of the accumulated value
    * @param fn - Function to combine the accumulator with each element
    * @param initial - The initial value for the accumulator
-   * @returns A new IterFlow of intermediate accumulator values
+   * @returns A new iterflow of intermediate accumulator values
    * @example
    * ```typescript
    * iter([1, 2, 3, 4]).scan((acc, x) => acc + x, 0).toArray();
@@ -256,7 +256,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Adds index as tuple with each element [index, value].
    * Creates tuples pairing each element with its zero-based index.
    *
-   * @returns A new IterFlow of tuples containing [index, value]
+   * @returns A new iterflow of tuples containing [index, value]
    * @example
    * ```typescript
    * iter(['a', 'b', 'c']).enumerate().toArray();
@@ -281,7 +281,7 @@ export class IterFlow<T> implements Iterable<T> {
    * ⚠️ Warning: This operation buffers all elements in memory and may cause
    * performance issues with large iterables. Consider using only when necessary.
    *
-   * @returns A new IterFlow with elements in reverse order
+   * @returns A new iterflow with elements in reverse order
    * @example
    * ```typescript
    * iter([1, 2, 3, 4, 5]).reverse().toArray();
@@ -306,8 +306,8 @@ export class IterFlow<T> implements Iterable<T> {
    * ⚠️ Warning: This operation buffers all elements in memory. Avoid chaining
    * with other buffering operations (reverse, sort, sortBy) for better performance.
    *
-   * @param this - IterFlow instance constrained to numbers or strings
-   * @returns A new IterFlow with elements sorted
+   * @param this - iterflow instance constrained to numbers or strings
+   * @returns A new iterflow with elements sorted
    * @example
    * ```typescript
    * iter([3, 1, 4, 1, 5]).sort().toArray();
@@ -338,7 +338,7 @@ export class IterFlow<T> implements Iterable<T> {
    * with other buffering operations (reverse, sort, sortBy) for better performance.
    *
    * @param compareFn - Function that compares two elements (returns negative if a < b, 0 if equal, positive if a > b)
-   * @returns A new IterFlow with elements sorted
+   * @returns A new iterflow with elements sorted
    * @example
    * ```typescript
    * iter([3, 1, 4, 1, 5]).sortBy((a, b) => a - b).toArray();
@@ -399,7 +399,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns The sum of all elements
    * @example
    * ```typescript
@@ -419,7 +419,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns The mean value, or undefined if the iterator is empty
    * @example
    * ```typescript
@@ -442,7 +442,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns The minimum value, or undefined if the iterator is empty
    * @example
    * ```typescript
@@ -465,7 +465,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns The maximum value, or undefined if the iterator is empty
    * @example
    * ```typescript
@@ -489,7 +489,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns The median value, or undefined if the iterator is empty
    * @example
    * ```typescript
@@ -518,7 +518,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns The variance, or undefined if the iterator is empty
    * @example
    * ```typescript
@@ -542,7 +542,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns The standard deviation, or undefined if the iterator is empty
    * @example
    * ```typescript
@@ -561,7 +561,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @param p - The percentile to calculate (0-100)
    * @returns The percentile value, or undefined if the iterator is empty
    * @throws {Error} If p is not between 0 and 100
@@ -603,7 +603,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns An array of the most frequent value(s), or undefined if the iterator is empty
    * @example
    * ```typescript
@@ -641,7 +641,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns An object with Q1, Q2, and Q3 values, or undefined if the iterator is empty
    * @example
    * ```typescript
@@ -686,7 +686,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns The span (max - min), or undefined if the iterator is empty
    * @example
    * ```typescript
@@ -718,7 +718,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @returns The product of all elements, or 1 if the iterator is empty
    * @example
    * ```typescript
@@ -741,7 +741,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @param other - An iterable of numbers to compare with
    * @returns The covariance, or undefined if either sequence is empty or sequences have different lengths
    * @example
@@ -785,7 +785,7 @@ export class IterFlow<T> implements Iterable<T> {
    * This method is only available when T is number.
    * This is a terminal operation that consumes the iterator.
    *
-   * @param this - IterFlow instance constrained to numbers
+   * @param this - iterflow instance constrained to numbers
    * @param other - An iterable of numbers to compare with
    * @returns The correlation coefficient, or undefined if either sequence is empty or sequences have different lengths
    * @example
@@ -845,7 +845,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Each window contains `size` consecutive elements.
    *
    * @param size - The size of each window (must be at least 1)
-   * @returns A new IterFlow of arrays, each containing `size` consecutive elements
+   * @returns A new iterflow of arrays, each containing `size` consecutive elements
    * @throws {Error} If size is less than 1
    * @example
    * ```typescript
@@ -880,7 +880,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Unlike window, chunks don't overlap. The last chunk may be smaller.
    *
    * @param size - The size of each chunk (must be at least 1)
-   * @returns A new IterFlow of arrays, each containing up to `size` elements
+   * @returns A new iterflow of arrays, each containing up to `size` elements
    * @throws {Error} If size is less than 1
    * @example
    * ```typescript
@@ -918,7 +918,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Creates pairs of consecutive elements.
    * Equivalent to window(2) but returns tuples instead of arrays.
    *
-   * @returns A new IterFlow of tuples, each containing two consecutive elements
+   * @returns A new iterflow of tuples, each containing two consecutive elements
    * @example
    * ```typescript
    * iter([1, 2, 3, 4]).pairwise().toArray();
@@ -934,7 +934,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Removes duplicate elements, keeping only the first occurrence of each.
    * Uses strict equality (===) to compare elements.
    *
-   * @returns A new IterFlow with duplicate elements removed
+   * @returns A new iterflow with duplicate elements removed
    * @example
    * ```typescript
    * iter([1, 2, 2, 3, 1, 4]).distinct().toArray();
@@ -963,7 +963,7 @@ export class IterFlow<T> implements Iterable<T> {
    *
    * @template K The type of the key used for comparison
    * @param keyFn - Function to extract the comparison key from each element
-   * @returns A new IterFlow with duplicate elements (by key) removed
+   * @returns A new iterflow with duplicate elements (by key) removed
    * @example
    * ```typescript
    * const users = [{id: 1, name: 'Alice'}, {id: 2, name: 'Bob'}, {id: 1, name: 'Charlie'}];
@@ -994,7 +994,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Useful for debugging or performing operations like logging.
    *
    * @param fn - Function to execute for each element
-   * @returns A new IterFlow with the same elements
+   * @returns A new iterflow with the same elements
    * @example
    * ```typescript
    * iter([1, 2, 3])
@@ -1020,7 +1020,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Stops at the first element that fails the predicate.
    *
    * @param predicate - Function to test each element
-   * @returns A new IterFlow with elements up to the first failing predicate
+   * @returns A new iterflow with elements up to the first failing predicate
    * @example
    * ```typescript
    * iter([1, 2, 3, 4, 1, 2]).takeWhile(x => x < 4).toArray();
@@ -1044,7 +1044,7 @@ export class IterFlow<T> implements Iterable<T> {
    * Starts yielding from the first element that fails the predicate.
    *
    * @param predicate - Function to test each element
-   * @returns A new IterFlow starting from the first element that fails the predicate
+   * @returns A new iterflow starting from the first element that fails the predicate
    * @example
    * ```typescript
    * iter([1, 2, 3, 4, 1, 2]).dropWhile(x => x < 3).toArray();

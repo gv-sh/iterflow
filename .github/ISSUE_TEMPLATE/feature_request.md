@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for IterFlow
+about: Suggest an idea for iterflow
 title: '[FEATURE] '
 labels: enhancement
 assignees: ''
@@ -41,6 +41,6 @@ If you have thoughts on how this might be implemented:
 Add any other context, screenshots, or examples about the feature request here.
 
 ## Checklist
-- [ ] This feature aligns with IterFlow's goal of extending native iterator functionality
+- [ ] This feature aligns with iterflow's goal of extending native iterator functionality
 - [ ] This feature would benefit the broader JavaScript/TypeScript community
 - [ ] I've searched existing issues to make sure this isn't a duplicate

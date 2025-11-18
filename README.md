@@ -1,4 +1,4 @@
-# IterFlow
+# iterflow
 
 Powerful iterator utilities for ES2022+ with statistical operations, windowing, and lazy evaluation. Forward compatible with ES2025 iterator helpers.
 
@@ -29,9 +29,9 @@ Powerful iterator utilities for ES2022+ with statistical operations, windowing, 
 - [Performance](#performance)
 - [Browser Support](#browser-support)
 
-## Why IterFlow?
+## Why iterflow?
 
-IterFlow extends JavaScript's native iterators with powerful operations missing from the standard library:
+iterflow extends JavaScript's native iterators with powerful operations missing from the standard library:
 
 - **Statistical operations** - Calculate mean, median, variance, percentiles directly on data streams
 - **Memory efficient** - Process large datasets or infinite sequences without loading everything into memory
@@ -39,7 +39,7 @@ IterFlow extends JavaScript's native iterators with powerful operations missing 
 - **Composable** - Chain operations naturally with both wrapper and functional styles
 - **Future-proof** - Designed to complement ES2025 iterator helpers, not replace them
 
-Whether you're processing time-series data, analyzing datasets, or building data pipelines, IterFlow provides the missing pieces for elegant, efficient JavaScript.
+Whether you're processing time-series data, analyzing datasets, or building data pipelines, iterflow provides the missing pieces for elegant, efficient JavaScript.
 
 ## Features
 
@@ -427,7 +427,7 @@ const increasingPeriods = iter(temperatures)
 
 ## TypeScript Support
 
-IterFlow is built with TypeScript-first design and provides excellent type inference:
+iterflow is built with TypeScript-first design and provides excellent type inference:
 
 ```typescript
 // Type is automatically inferred as IterFlow<string>
@@ -457,7 +457,7 @@ const adults = iter([
 
 ## Performance
 
-IterFlow uses lazy evaluation, meaning operations are only computed when needed:
+iterflow uses lazy evaluation, meaning operations are only computed when needed:
 
 ```typescript
 const expensiveOperation = iter(largeArray)
@@ -472,9 +472,9 @@ This makes it efficient for processing large datasets or infinite sequences.
 
 ## Browser Support
 
-IterFlow requires ES2022+ features including iterators, generators, Map, and Set. For older browser support, use a transpiler like TypeScript or Babel.
+iterflow requires ES2022+ features including iterators, generators, Map, and Set. For older browser support, use a transpiler like TypeScript or Babel.
 
-When ES2025 iterator helpers become available natively, IterFlow will work alongside them seamlessly as it's designed to extend rather than replace the native functionality.
+When ES2025 iterator helpers become available natively, iterflow will work alongside them seamlessly as it's designed to extend rather than replace the native functionality.
 
 ## Contributing
 

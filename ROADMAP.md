@@ -78,7 +78,7 @@
 
 ### Guides & Tutorials
 - [ ] Getting Started guide for beginners
-- [ ] Migration guide from array methods to IterFlow
+- [ ] Migration guide from array methods to iterflow
 - [ ] Performance optimization guide (when to use what)
 - [ ] Working with infinite sequences guide
 - [ ] TypeScript integration best practices
@@ -97,13 +97,13 @@
 - [ ] Comparison with lodash methods
 - [ ] Comparison with Ramda functions
 - [ ] Comparison with ES2025 iterator helpers proposal
-- [ ] Migration guide from lodash to IterFlow
-- [ ] Migration guide from Ramda to IterFlow
+- [ ] Migration guide from lodash to iterflow
+- [ ] Migration guide from Ramda to iterflow
 
 ## Advanced Features
 
 ### Async Iterator Support
-- [ ] `AsyncIterFlow` class for async iterators
+- [ ] `AsyncIterflow` class for async iterators
 - [ ] Async versions of all transformation operations
 - [ ] Async versions of all terminal operations
 - [ ] Async statistical operations
