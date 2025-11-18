@@ -3,16 +3,16 @@
 ## Core API Completeness
 
 ### Missing Terminal Operations
-- [ ] `reduce()` - Reduce iterator to a single value with accumulator
-- [ ] `find()` - Find first element matching predicate
-- [ ] `findIndex()` - Find index of first matching element
-- [ ] `some()` - Test if any element matches predicate
-- [ ] `every()` - Test if all elements match predicate
-- [ ] `first()` - Get first element with optional default value
-- [ ] `last()` - Get last element with optional default value
-- [ ] `nth()` - Get nth element by index
-- [ ] `isEmpty()` - Check if iterator is empty
-- [ ] `includes()` - Check if value exists in iterator
+- [x] `reduce()` - Reduce iterator to a single value with accumulator
+- [x] `find()` - Find first element matching predicate
+- [x] `findIndex()` - Find index of first matching element
+- [x] `some()` - Test if any element matches predicate
+- [x] `every()` - Test if all elements match predicate
+- [x] `first()` - Get first element with optional default value
+- [x] `last()` - Get last element with optional default value
+- [x] `nth()` - Get nth element by index
+- [x] `isEmpty()` - Check if iterator is empty
+- [x] `includes()` - Check if value exists in iterator
 
 ### Additional Transformation Operations
 - [ ] `flatMap()` - Add missing functional API implementation (exists in wrapper API only)
