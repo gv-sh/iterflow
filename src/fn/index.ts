@@ -461,7 +461,7 @@ export function partition<T>(
  * ```typescript
  * const groupByLength = groupBy((s: string) => s.length);
  * groupByLength(['alice', 'bob', 'charlie', 'dave']);
- * // Map { 3 => ['bob'], 5 => ['alice', 'dave'], 7 => ['charlie'] }
+ * // Map { 3 => ['bob'], 5 => ['alice'], 7 => ['charlie'], 4 => ['dave'] }
  * ```
  */
 export function groupBy<T, K>(
