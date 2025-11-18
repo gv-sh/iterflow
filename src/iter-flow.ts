@@ -405,6 +405,248 @@ export class IterFlow<T> implements Iterable<T> {
     return values[lower]! * (1 - weight) + values[upper]! * weight;
   }
 
+  /**
+   * Finds the most frequent value(s) in the dataset.
+   * Returns an array of all values that appear most frequently.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns An array of the most frequent value(s), or undefined if the iterator is empty
+   * @example
+   * ```typescript
+   * iter([1, 2, 2, 3, 3, 3]).mode(); // [3]
+   * iter([1, 1, 2, 2, 3]).mode(); // [1, 2] (bimodal)
+   * iter([]).mode(); // undefined
+   * ```
+   */
+  mode(this: IterFlow<number>): number[] | undefined {
+    const values = this.toArray();
+    if (values.length === 0) return undefined;
+
+    const frequency = new Map<number, number>();
+    let maxFreq = 0;
+
+    for (const value of values) {
+      const count = (frequency.get(value) || 0) + 1;
+      frequency.set(value, count);
+      maxFreq = Math.max(maxFreq, count);
+    }
+
+    const modes: number[] = [];
+    for (const [value, freq] of frequency) {
+      if (freq === maxFreq) {
+        modes.push(value);
+      }
+    }
+
+    return modes.sort((a, b) => a - b);
+  }
+
+  /**
+   * Calculates the quartiles (Q1, Q2, Q3) of all numeric elements.
+   * Q1 is the 25th percentile, Q2 is the median (50th percentile), Q3 is the 75th percentile.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns An object with Q1, Q2, and Q3 values, or undefined if the iterator is empty
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5, 6, 7, 8, 9]).quartiles();
+   * // { Q1: 3, Q2: 5, Q3: 7 }
+   * iter([]).quartiles(); // undefined
+   * ```
+   */
+  quartiles(
+    this: IterFlow<number>
+  ): { Q1: number; Q2: number; Q3: number } | undefined {
+    const values = this.toArray();
+    if (values.length === 0) return undefined;
+
+    values.sort((a, b) => a - b);
+
+    const calculatePercentile = (p: number): number => {
+      if (p === 0) return values[0]!;
+      if (p === 100) return values[values.length - 1]!;
+
+      const index = (p / 100) * (values.length - 1);
+      const lower = Math.floor(index);
+      const upper = Math.ceil(index);
+
+      if (lower === upper) {
+        return values[lower]!;
+      }
+
+      const weight = index - lower;
+      return values[lower]! * (1 - weight) + values[upper]! * weight;
+    };
+
+    return {
+      Q1: calculatePercentile(25),
+      Q2: calculatePercentile(50),
+      Q3: calculatePercentile(75),
+    };
+  }
+
+  /**
+   * Calculates the span (range from minimum to maximum value) of all numeric elements.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns The span (max - min), or undefined if the iterator is empty
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).span(); // 4
+   * iter([10]).span(); // 0
+   * iter([]).span(); // undefined
+   * ```
+   */
+  span(this: IterFlow<number>): number | undefined {
+    let minimum: number | undefined = undefined;
+    let maximum: number | undefined = undefined;
+
+    for (const value of this) {
+      if (minimum === undefined || value < minimum) {
+        minimum = value;
+      }
+      if (maximum === undefined || value > maximum) {
+        maximum = value;
+      }
+    }
+
+    return minimum === undefined || maximum === undefined
+      ? undefined
+      : maximum - minimum;
+  }
+
+  /**
+   * Calculates the product of all numeric elements.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns The product of all elements, or 1 if the iterator is empty
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).product(); // 120
+   * iter([2, 3, 4]).product(); // 24
+   * iter([]).product(); // 1
+   * ```
+   */
+  product(this: IterFlow<number>): number {
+    let result = 1;
+    for (const value of this) {
+      result *= value;
+    }
+    return result;
+  }
+
+  /**
+   * Calculates the covariance between two numeric sequences.
+   * Covariance measures the joint variability of two random variables.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @param other - An iterable of numbers to compare with
+   * @returns The covariance, or undefined if either sequence is empty or sequences have different lengths
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).covariance([2, 4, 6, 8, 10]); // 4
+   * iter([]).covariance([1, 2, 3]); // undefined
+   * ```
+   */
+  covariance(
+    this: IterFlow<number>,
+    other: Iterable<number>
+  ): number | undefined {
+    const values1 = this.toArray();
+    const values2 = Array.from(other);
+
+    if (
+      values1.length === 0 ||
+      values2.length === 0 ||
+      values1.length !== values2.length
+    ) {
+      return undefined;
+    }
+
+    const mean1 =
+      values1.reduce((sum, val) => sum + val, 0) / values1.length;
+    const mean2 =
+      values2.reduce((sum, val) => sum + val, 0) / values2.length;
+
+    let covariance = 0;
+    for (let i = 0; i < values1.length; i++) {
+      covariance += (values1[i]! - mean1) * (values2[i]! - mean2);
+    }
+
+    return covariance / values1.length;
+  }
+
+  /**
+   * Calculates the Pearson correlation coefficient between two numeric sequences.
+   * Correlation measures the strength and direction of the linear relationship between two variables.
+   * Values range from -1 (perfect negative correlation) to 1 (perfect positive correlation).
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @param other - An iterable of numbers to compare with
+   * @returns The correlation coefficient, or undefined if either sequence is empty or sequences have different lengths
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).correlation([2, 4, 6, 8, 10]); // 1 (perfect positive correlation)
+   * iter([1, 2, 3]).correlation([3, 2, 1]); // -1 (perfect negative correlation)
+   * iter([]).correlation([1, 2, 3]); // undefined
+   * ```
+   */
+  correlation(
+    this: IterFlow<number>,
+    other: Iterable<number>
+  ): number | undefined {
+    const values1 = this.toArray();
+    const values2 = Array.from(other);
+
+    if (
+      values1.length === 0 ||
+      values2.length === 0 ||
+      values1.length !== values2.length
+    ) {
+      return undefined;
+    }
+
+    const mean1 =
+      values1.reduce((sum, val) => sum + val, 0) / values1.length;
+    const mean2 =
+      values2.reduce((sum, val) => sum + val, 0) / values2.length;
+
+    let covariance = 0;
+    let variance1 = 0;
+    let variance2 = 0;
+
+    for (let i = 0; i < values1.length; i++) {
+      const diff1 = values1[i]! - mean1;
+      const diff2 = values2[i]! - mean2;
+      covariance += diff1 * diff2;
+      variance1 += diff1 * diff1;
+      variance2 += diff2 * diff2;
+    }
+
+    const stdDev1 = Math.sqrt(variance1 / values1.length);
+    const stdDev2 = Math.sqrt(variance2 / values2.length);
+
+    if (stdDev1 === 0 || stdDev2 === 0) {
+      return undefined;
+    }
+
+    return (
+      covariance / (values1.length * stdDev1 * stdDev2)
+    );
+  }
+
   // Windowing operations
   /**
    * Creates a sliding window of the specified size over the elements.
