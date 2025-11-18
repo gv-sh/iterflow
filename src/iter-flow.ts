@@ -1,21 +1,66 @@
+/**
+ * A fluent interface wrapper for working with iterators and iterables.
+ * Provides chainable methods for transforming, filtering, and analyzing data streams.
+ *
+ * @template T The type of elements in the iterator
+ * @example
+ * ```typescript
+ * const result = new IterFlow([1, 2, 3, 4, 5])
+ *   .filter(x => x % 2 === 0)
+ *   .map(x => x * 2)
+ *   .toArray(); // [4, 8]
+ * ```
+ */
 export class IterFlow<T> implements Iterable<T> {
   private source: Iterator<T>;
 
+  /**
+   * Creates a new IterFlow instance from an iterable or iterator.
+   *
+   * @param source - The source iterable or iterator to wrap
+   * @example
+   * ```typescript
+   * const flow1 = new IterFlow([1, 2, 3]);
+   * const flow2 = new IterFlow(someIterator);
+   * ```
+   */
   constructor(source: Iterable<T> | Iterator<T>) {
     this.source =
       Symbol.iterator in source ? source[Symbol.iterator]() : source;
   }
 
   // Iterator protocol
+  /**
+   * Returns the iterator for this IterFlow instance.
+   * This allows IterFlow to be used in for...of loops.
+   *
+   * @returns The underlying iterator
+   */
   [Symbol.iterator](): Iterator<T> {
     return this.source;
   }
 
+  /**
+   * Retrieves the next value from the iterator.
+   *
+   * @returns An IteratorResult containing the next value or indicating completion
+   */
   next(): IteratorResult<T> {
     return this.source.next();
   }
 
   // ES2025 native passthrough methods (would normally delegate to native implementations)
+  /**
+   * Transforms each element using the provided function.
+   *
+   * @template U The type of the transformed elements
+   * @param fn - Function to transform each element
+   * @returns A new IterFlow with transformed elements
+   * @example
+   * ```typescript
+   * iter([1, 2, 3]).map(x => x * 2).toArray(); // [2, 4, 6]
+   * ```
+   */
   map<U>(fn: (value: T) => U): IterFlow<U> {
     const self = this;
     return new IterFlow({
@@ -27,6 +72,17 @@ export class IterFlow<T> implements Iterable<T> {
     });
   }
 
+  /**
+   * Filters elements based on a predicate function.
+   * Only elements for which the predicate returns true are included.
+   *
+   * @param predicate - Function to test each element
+   * @returns A new IterFlow with only elements that pass the predicate
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4]).filter(x => x % 2 === 0).toArray(); // [2, 4]
+   * ```
+   */
   filter(predicate: (value: T) => boolean): IterFlow<T> {
     const self = this;
     return new IterFlow({
@@ -40,6 +96,16 @@ export class IterFlow<T> implements Iterable<T> {
     });
   }
 
+  /**
+   * Takes only the first `limit` elements from the iterator.
+   *
+   * @param limit - Maximum number of elements to take
+   * @returns A new IterFlow with at most `limit` elements
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).take(3).toArray(); // [1, 2, 3]
+   * ```
+   */
   take(limit: number): IterFlow<T> {
     const self = this;
     return new IterFlow({
@@ -54,6 +120,16 @@ export class IterFlow<T> implements Iterable<T> {
     });
   }
 
+  /**
+   * Skips the first `count` elements from the iterator.
+   *
+   * @param count - Number of elements to skip
+   * @returns A new IterFlow without the first `count` elements
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).drop(2).toArray(); // [3, 4, 5]
+   * ```
+   */
   drop(count: number): IterFlow<T> {
     const self = this;
     return new IterFlow({
@@ -70,6 +146,17 @@ export class IterFlow<T> implements Iterable<T> {
     });
   }
 
+  /**
+   * Maps each element to an iterable and flattens the results into a single iterator.
+   *
+   * @template U The type of elements in the resulting iterator
+   * @param fn - Function that maps each element to an iterable
+   * @returns A new IterFlow with all mapped iterables flattened
+   * @example
+   * ```typescript
+   * iter([1, 2, 3]).flatMap(x => [x, x * 2]).toArray(); // [1, 2, 2, 4, 3, 6]
+   * ```
+   */
   flatMap<U>(fn: (value: T) => Iterable<U>): IterFlow<U> {
     const self = this;
     return new IterFlow({
@@ -82,10 +169,30 @@ export class IterFlow<T> implements Iterable<T> {
   }
 
   // Terminal operations (consume the iterator)
+  /**
+   * Collects all elements into an array.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @returns An array containing all elements
+   * @example
+   * ```typescript
+   * iter([1, 2, 3]).map(x => x * 2).toArray(); // [2, 4, 6]
+   * ```
+   */
   toArray(): T[] {
     return Array.from(this);
   }
 
+  /**
+   * Counts the total number of elements in the iterator.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @returns The total count of elements
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).count(); // 5
+   * ```
+   */
   count(): number {
     let count = 0;
     for (const _ of this) {
@@ -95,6 +202,18 @@ export class IterFlow<T> implements Iterable<T> {
   }
 
   // Statistical operations - type-constrained to numbers
+  /**
+   * Calculates the sum of all numeric elements.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns The sum of all elements
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).sum(); // 15
+   * ```
+   */
   sum(this: IterFlow<number>): number {
     let total = 0;
     for (const value of this) {
@@ -103,6 +222,19 @@ export class IterFlow<T> implements Iterable<T> {
     return total;
   }
 
+  /**
+   * Calculates the arithmetic mean (average) of all numeric elements.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns The mean value, or undefined if the iterator is empty
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).mean(); // 3
+   * iter([]).mean(); // undefined
+   * ```
+   */
   mean(this: IterFlow<number>): number | undefined {
     let total = 0;
     let count = 0;
@@ -113,6 +245,19 @@ export class IterFlow<T> implements Iterable<T> {
     return count === 0 ? undefined : total / count;
   }
 
+  /**
+   * Finds the minimum value among all numeric elements.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns The minimum value, or undefined if the iterator is empty
+   * @example
+   * ```typescript
+   * iter([3, 1, 4, 1, 5]).min(); // 1
+   * iter([]).min(); // undefined
+   * ```
+   */
   min(this: IterFlow<number>): number | undefined {
     let minimum: number | undefined = undefined;
     for (const value of this) {
@@ -123,6 +268,19 @@ export class IterFlow<T> implements Iterable<T> {
     return minimum;
   }
 
+  /**
+   * Finds the maximum value among all numeric elements.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns The maximum value, or undefined if the iterator is empty
+   * @example
+   * ```typescript
+   * iter([3, 1, 4, 1, 5]).max(); // 5
+   * iter([]).max(); // undefined
+   * ```
+   */
   max(this: IterFlow<number>): number | undefined {
     let maximum: number | undefined = undefined;
     for (const value of this) {
@@ -133,6 +291,21 @@ export class IterFlow<T> implements Iterable<T> {
     return maximum;
   }
 
+  /**
+   * Calculates the median value of all numeric elements.
+   * The median is the middle value when elements are sorted.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns The median value, or undefined if the iterator is empty
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).median(); // 3
+   * iter([1, 2, 3, 4]).median(); // 2.5
+   * iter([]).median(); // undefined
+   * ```
+   */
   median(this: IterFlow<number>): number | undefined {
     const values = this.toArray();
     if (values.length === 0) return undefined;
@@ -147,6 +320,20 @@ export class IterFlow<T> implements Iterable<T> {
     }
   }
 
+  /**
+   * Calculates the variance of all numeric elements.
+   * Variance measures how far each number in the set is from the mean.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns The variance, or undefined if the iterator is empty
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).variance(); // 2
+   * iter([]).variance(); // undefined
+   * ```
+   */
   variance(this: IterFlow<number>): number | undefined {
     const values = this.toArray();
     if (values.length === 0) return undefined;
@@ -157,11 +344,42 @@ export class IterFlow<T> implements Iterable<T> {
     return squaredDiffs.reduce((sum, diff) => sum + diff, 0) / values.length;
   }
 
+  /**
+   * Calculates the standard deviation of all numeric elements.
+   * Standard deviation is the square root of variance and measures dispersion.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @returns The standard deviation, or undefined if the iterator is empty
+   * @example
+   * ```typescript
+   * iter([2, 4, 4, 4, 5, 5, 7, 9]).stdDev(); // ~2
+   * iter([]).stdDev(); // undefined
+   * ```
+   */
   stdDev(this: IterFlow<number>): number | undefined {
     const variance = this.variance();
     return variance === undefined ? undefined : Math.sqrt(variance);
   }
 
+  /**
+   * Calculates the specified percentile of all numeric elements.
+   * Uses linear interpolation between closest ranks.
+   * This method is only available when T is number.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param this - IterFlow instance constrained to numbers
+   * @param p - The percentile to calculate (0-100)
+   * @returns The percentile value, or undefined if the iterator is empty
+   * @throws {Error} If p is not between 0 and 100
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).percentile(50); // 3 (median)
+   * iter([1, 2, 3, 4, 5]).percentile(75); // 4
+   * iter([]).percentile(50); // undefined
+   * ```
+   */
   percentile(this: IterFlow<number>, p: number): number | undefined {
     if (p < 0 || p > 100) {
       throw new Error("Percentile must be between 0 and 100");
@@ -188,6 +406,19 @@ export class IterFlow<T> implements Iterable<T> {
   }
 
   // Windowing operations
+  /**
+   * Creates a sliding window of the specified size over the elements.
+   * Each window contains `size` consecutive elements.
+   *
+   * @param size - The size of each window (must be at least 1)
+   * @returns A new IterFlow of arrays, each containing `size` consecutive elements
+   * @throws {Error} If size is less than 1
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).window(3).toArray();
+   * // [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
+   * ```
+   */
   window(size: number): IterFlow<T[]> {
     if (size < 1) {
       throw new Error("Window size must be at least 1");
@@ -210,6 +441,19 @@ export class IterFlow<T> implements Iterable<T> {
     });
   }
 
+  /**
+   * Splits elements into chunks of the specified size.
+   * Unlike window, chunks don't overlap. The last chunk may be smaller.
+   *
+   * @param size - The size of each chunk (must be at least 1)
+   * @returns A new IterFlow of arrays, each containing up to `size` elements
+   * @throws {Error} If size is less than 1
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).chunk(2).toArray();
+   * // [[1, 2], [3, 4], [5]]
+   * ```
+   */
   chunk(size: number): IterFlow<T[]> {
     if (size < 1) {
       throw new Error("Chunk size must be at least 1");
@@ -236,11 +480,33 @@ export class IterFlow<T> implements Iterable<T> {
     });
   }
 
+  /**
+   * Creates pairs of consecutive elements.
+   * Equivalent to window(2) but returns tuples instead of arrays.
+   *
+   * @returns A new IterFlow of tuples, each containing two consecutive elements
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4]).pairwise().toArray();
+   * // [[1, 2], [2, 3], [3, 4]]
+   * ```
+   */
   pairwise(): IterFlow<[T, T]> {
     return this.window(2).map((arr) => [arr[0]!, arr[1]!] as [T, T]);
   }
 
   // Set operations
+  /**
+   * Removes duplicate elements, keeping only the first occurrence of each.
+   * Uses strict equality (===) to compare elements.
+   *
+   * @returns A new IterFlow with duplicate elements removed
+   * @example
+   * ```typescript
+   * iter([1, 2, 2, 3, 1, 4]).distinct().toArray();
+   * // [1, 2, 3, 4]
+   * ```
+   */
   distinct(): IterFlow<T> {
     const self = this;
     return new IterFlow({
@@ -257,6 +523,20 @@ export class IterFlow<T> implements Iterable<T> {
     });
   }
 
+  /**
+   * Removes duplicate elements based on a key function.
+   * Keeps only the first occurrence of each unique key.
+   *
+   * @template K The type of the key used for comparison
+   * @param keyFn - Function to extract the comparison key from each element
+   * @returns A new IterFlow with duplicate elements (by key) removed
+   * @example
+   * ```typescript
+   * const users = [{id: 1, name: 'Alice'}, {id: 2, name: 'Bob'}, {id: 1, name: 'Charlie'}];
+   * iter(users).distinctBy(u => u.id).toArray();
+   * // [{id: 1, name: 'Alice'}, {id: 2, name: 'Bob'}]
+   * ```
+   */
   distinctBy<K>(keyFn: (value: T) => K): IterFlow<T> {
     const self = this;
     return new IterFlow({
@@ -275,6 +555,20 @@ export class IterFlow<T> implements Iterable<T> {
   }
 
   // Utility operations
+  /**
+   * Executes a side-effect function on each element without modifying the stream.
+   * Useful for debugging or performing operations like logging.
+   *
+   * @param fn - Function to execute for each element
+   * @returns A new IterFlow with the same elements
+   * @example
+   * ```typescript
+   * iter([1, 2, 3])
+   *   .tap(x => console.log('Processing:', x))
+   *   .map(x => x * 2)
+   *   .toArray(); // logs each value, returns [2, 4, 6]
+   * ```
+   */
   tap(fn: (value: T) => void): IterFlow<T> {
     const self = this;
     return new IterFlow({
@@ -287,6 +581,18 @@ export class IterFlow<T> implements Iterable<T> {
     });
   }
 
+  /**
+   * Takes elements while the predicate returns true, then stops.
+   * Stops at the first element that fails the predicate.
+   *
+   * @param predicate - Function to test each element
+   * @returns A new IterFlow with elements up to the first failing predicate
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 1, 2]).takeWhile(x => x < 4).toArray();
+   * // [1, 2, 3]
+   * ```
+   */
   takeWhile(predicate: (value: T) => boolean): IterFlow<T> {
     const self = this;
     return new IterFlow({
@@ -299,6 +605,18 @@ export class IterFlow<T> implements Iterable<T> {
     });
   }
 
+  /**
+   * Skips elements while the predicate returns true, then yields all remaining elements.
+   * Starts yielding from the first element that fails the predicate.
+   *
+   * @param predicate - Function to test each element
+   * @returns A new IterFlow starting from the first element that fails the predicate
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 1, 2]).dropWhile(x => x < 3).toArray();
+   * // [3, 4, 1, 2]
+   * ```
+   */
   dropWhile(predicate: (value: T) => boolean): IterFlow<T> {
     const self = this;
     return new IterFlow({
@@ -316,6 +634,18 @@ export class IterFlow<T> implements Iterable<T> {
   }
 
   // Grouping operations (terminal)
+  /**
+   * Splits elements into two arrays based on a predicate.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @param predicate - Function to test each element
+   * @returns A tuple of two arrays: [elements passing predicate, elements failing predicate]
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).partition(x => x % 2 === 0);
+   * // [[2, 4], [1, 3, 5]]
+   * ```
+   */
   partition(predicate: (value: T) => boolean): [T[], T[]] {
     const truthy: T[] = [];
     const falsy: T[] = [];
@@ -331,6 +661,20 @@ export class IterFlow<T> implements Iterable<T> {
     return [truthy, falsy];
   }
 
+  /**
+   * Groups elements by a key function into a Map.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @template K The type of the grouping key
+   * @param keyFn - Function to extract the grouping key from each element
+   * @returns A Map where keys are the result of keyFn and values are arrays of elements
+   * @example
+   * ```typescript
+   * iter(['alice', 'bob', 'charlie', 'dave'])
+   *   .groupBy(name => name.length);
+   * // Map { 3 => ['bob'], 5 => ['alice', 'dave'], 7 => ['charlie'] }
+   * ```
+   */
   groupBy<K>(keyFn: (value: T) => K): Map<K, T[]> {
     const groups = new Map<K, T[]>();
 
