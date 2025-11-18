@@ -70,7 +70,7 @@
 ## Documentation
 
 ### API Documentation
-- [ ] JSDoc comments for all public methods and functions
+- [x] JSDoc comments for all public methods and functions
 - [ ] Complete API reference page with all methods
 - [ ] Code examples for every single operation
 - [ ] TypeDoc auto-generated documentation setup
