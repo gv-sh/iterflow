@@ -688,4 +688,220 @@ export class IterFlow<T> implements Iterable<T> {
 
     return groups;
   }
+
+  // Additional terminal operations
+  /**
+   * Reduces the iterator to a single value using an accumulator function.
+   * This is a terminal operation that consumes the iterator.
+   *
+   * @template U The type of the accumulated value
+   * @param fn - Function to combine the accumulator with each element
+   * @param initial - The initial value for the accumulator
+   * @returns The final accumulated value
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4]).reduce((acc, x) => acc + x, 0); // 10
+   * iter(['a', 'b', 'c']).reduce((acc, x) => acc + x, ''); // 'abc'
+   * ```
+   */
+  reduce<U>(fn: (accumulator: U, value: T) => U, initial: U): U {
+    let accumulator = initial;
+    for (const value of this) {
+      accumulator = fn(accumulator, value);
+    }
+    return accumulator;
+  }
+
+  /**
+   * Finds the first element that matches the predicate.
+   * This is a terminal operation that may consume part of the iterator.
+   *
+   * @param predicate - Function to test each element
+   * @returns The first matching element, or undefined if none found
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).find(x => x > 3); // 4
+   * iter([1, 2, 3]).find(x => x > 10); // undefined
+   * ```
+   */
+  find(predicate: (value: T) => boolean): T | undefined {
+    for (const value of this) {
+      if (predicate(value)) {
+        return value;
+      }
+    }
+    return undefined;
+  }
+
+  /**
+   * Finds the index of the first element that matches the predicate.
+   * This is a terminal operation that may consume part of the iterator.
+   *
+   * @param predicate - Function to test each element
+   * @returns The index of the first matching element, or -1 if none found
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).findIndex(x => x > 3); // 3
+   * iter([1, 2, 3]).findIndex(x => x > 10); // -1
+   * ```
+   */
+  findIndex(predicate: (value: T) => boolean): number {
+    let index = 0;
+    for (const value of this) {
+      if (predicate(value)) {
+        return index;
+      }
+      index++;
+    }
+    return -1;
+  }
+
+  /**
+   * Tests whether at least one element matches the predicate.
+   * This is a terminal operation that may consume part of the iterator.
+   *
+   * @param predicate - Function to test each element
+   * @returns true if any element matches, false otherwise
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).some(x => x > 3); // true
+   * iter([1, 2, 3]).some(x => x > 10); // false
+   * ```
+   */
+  some(predicate: (value: T) => boolean): boolean {
+    for (const value of this) {
+      if (predicate(value)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Tests whether all elements match the predicate.
+   * This is a terminal operation that may consume part or all of the iterator.
+   *
+   * @param predicate - Function to test each element
+   * @returns true if all elements match, false otherwise
+   * @example
+   * ```typescript
+   * iter([2, 4, 6]).every(x => x % 2 === 0); // true
+   * iter([1, 2, 3]).every(x => x % 2 === 0); // false
+   * ```
+   */
+  every(predicate: (value: T) => boolean): boolean {
+    for (const value of this) {
+      if (!predicate(value)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Gets the first element from the iterator.
+   * This is a terminal operation that consumes the first element.
+   *
+   * @param defaultValue - Optional default value to return if iterator is empty
+   * @returns The first element, the default value, or undefined if empty and no default
+   * @example
+   * ```typescript
+   * iter([1, 2, 3]).first(); // 1
+   * iter([]).first(); // undefined
+   * iter([]).first(0); // 0
+   * ```
+   */
+  first(defaultValue?: T): T | undefined {
+    const result = this.source.next();
+    return result.done ? defaultValue : result.value;
+  }
+
+  /**
+   * Gets the last element from the iterator.
+   * This is a terminal operation that consumes the entire iterator.
+   *
+   * @param defaultValue - Optional default value to return if iterator is empty
+   * @returns The last element, the default value, or undefined if empty and no default
+   * @example
+   * ```typescript
+   * iter([1, 2, 3]).last(); // 3
+   * iter([]).last(); // undefined
+   * iter([]).last(0); // 0
+   * ```
+   */
+  last(defaultValue?: T): T | undefined {
+    let lastValue: T | undefined = defaultValue;
+    let hasValue = false;
+    for (const value of this) {
+      lastValue = value;
+      hasValue = true;
+    }
+    return hasValue ? lastValue : defaultValue;
+  }
+
+  /**
+   * Gets the element at the specified index.
+   * This is a terminal operation that may consume part of the iterator.
+   *
+   * @param index - Zero-based index of the element to retrieve
+   * @returns The element at the index, or undefined if index is out of bounds
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).nth(2); // 3
+   * iter([1, 2, 3]).nth(10); // undefined
+   * iter([1, 2, 3]).nth(-1); // undefined
+   * ```
+   */
+  nth(index: number): T | undefined {
+    if (index < 0) {
+      return undefined;
+    }
+    let currentIndex = 0;
+    for (const value of this) {
+      if (currentIndex === index) {
+        return value;
+      }
+      currentIndex++;
+    }
+    return undefined;
+  }
+
+  /**
+   * Checks if the iterator is empty.
+   * This is a terminal operation that may consume the first element.
+   *
+   * @returns true if the iterator has no elements, false otherwise
+   * @example
+   * ```typescript
+   * iter([]).isEmpty(); // true
+   * iter([1, 2, 3]).isEmpty(); // false
+   * ```
+   */
+  isEmpty(): boolean {
+    const result = this.source.next();
+    return result.done === true;
+  }
+
+  /**
+   * Checks if the iterator includes a specific value.
+   * Uses strict equality (===) for comparison.
+   * This is a terminal operation that may consume part or all of the iterator.
+   *
+   * @param searchValue - The value to search for
+   * @returns true if the value is found, false otherwise
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).includes(3); // true
+   * iter([1, 2, 3]).includes(10); // false
+   * iter(['a', 'b', 'c']).includes('b'); // true
+   * ```
+   */
+  includes(searchValue: T): boolean {
+    for (const value of this) {
+      if (value === searchValue) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
