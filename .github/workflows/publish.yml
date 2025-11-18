@@ -62,11 +62,3 @@ jobs:
     
     - name: Build package
       run: npm run build
-    
-    - name: Publish to npm (if version changed)
-      run: |
-        if [ "$(npm view iterflow version)" != "$(node -p "require('./package.json').version")" ]; then
-          npm publish --access public
-        fi
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
