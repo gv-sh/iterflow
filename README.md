@@ -2,7 +2,7 @@
 
 Powerful iterator utilities for ES2022+ with statistical operations, windowing, and lazy evaluation. Forward compatible with ES2025 iterator helpers.
 
-[![npm version](https://badge.fury.io/js/iterflow.svg)](https://www.npmjs.com/package/iterflow)
+[![npm version](https://img.shields.io/npm/v/iterflow.svg)](https://www.npmjs.com/package/iterflow)
 [![CI](https://github.com/gv-sh/iterflow/workflows/CI/badge.svg)](https://github.com/gv-sh/iterflow/actions)
 [![codecov](https://codecov.io/gh/gv-sh/iterflow/branch/main/graph/badge.svg)](https://codecov.io/gh/gv-sh/iterflow)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
