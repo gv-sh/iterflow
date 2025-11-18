@@ -1,5 +1,45 @@
 # Roadmap to v1.0
 
+## Critical Implementation Gaps (Discovered via Codebase Analysis)
+
+### 🔴 Blocking Issues for v1.0
+
+#### API Completeness
+- [ ] **`flatMap()` missing from functional API** - Exists in wrapper API but not in `src/fn/index.ts` (5 min fix)
+- [ ] **Functional API has 0% test coverage** - 406 lines of untested code in `src/fn/index.ts` (2-4 hours to add comprehensive tests)
+
+#### Build & Configuration
+- [ ] **No JSDoc comments** - Zero JSDoc documentation on any public methods/functions (3-4 hours)
+- [ ] **TypeDoc not configured** - Documentation generation setup incomplete (1-2 hours)
+- [ ] **No benchmark suite** - Performance testing infrastructure missing per ROADMAP.md (4-6 hours)
+- [ ] **No browser testing setup** - Chrome, Firefox, Safari, Edge testing infrastructure missing (2-3 hours)
+
+#### Documentation Accuracy
+- [ ] **Misleading comment in README.md:342** - Example shows `max()` without custom comparison but comment suggests it needs one
+- [ ] **Missing docs/api.md** - Referenced in README.md:447 but file doesn't exist (8-10 hours to create comprehensive API reference)
+
+### 🟡 Non-Blocking Quality Issues
+
+#### Code Quality
+- [x] **TypeScript compilation** - Zero errors/warnings ✅
+- [x] **ESLint validation** - No violations found ✅
+- [x] **Test suite passing** - 109/109 tests passing ✅
+- [x] **Build outputs** - ESM + CJS + Types all generating correctly ✅
+
+#### Test Coverage (Implemented Features)
+- [x] **Wrapper API coverage** - 98.61% statements, 98.36% branches ✅
+- [x] **Main exports coverage** - 91.42% statements, 88.88% branches ✅
+- [ ] **Functional API coverage** - 0% (critical gap)
+- [ ] **Integration tests** - Between wrapper and functional APIs
+- [ ] **Edge case coverage** - Empty iterators, single elements, infinite sequences need more tests
+
+#### Examples & Demos
+- [x] **Working examples** - All 4 example files execute correctly ✅
+- [ ] **Example test coverage** - Examples not included in test coverage metrics
+- [ ] **Real-world use case examples** - Need advanced examples as outlined in Documentation section
+
+---
+
 ## Core API Completeness
 
 ### Missing Terminal Operations
@@ -226,7 +266,17 @@
 
 ---
 
-**Total Items:** ~120+ tasks
+## Summary
+
+**Critical Implementation Gaps:** 10 blocking issues identified
+**Existing Planned Tasks:** ~120 tasks from original roadmap
+**Total Items:** ~130+ tasks
+**Current Implementation Status:** ~85% complete for core features (v0.1.7)
 **Target Completion:** 2025
+
+### Priority Timeline for v1.0
+- **Immediate (1-2 weeks):** Fix flatMap, add functional API tests, add JSDoc
+- **Short-term (1-2 months):** Complete missing terminal operations, setup benchmarks
+- **Medium-term (3-6 months):** Advanced features, async support, comprehensive documentation
 
 *Last Updated: 2025-11-18*
