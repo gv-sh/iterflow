@@ -15,6 +15,7 @@
 - [ ] `includes()` - Check if value exists in iterator
 
 ### Additional Transformation Operations
+- [ ] `flatMap()` - Add missing functional API implementation (exists in wrapper API only)
 - [ ] `concat()` - Concatenate multiple iterators sequentially
 - [ ] `intersperse()` - Insert separator element between each item
 - [ ] `scan()` - Like reduce but emit all intermediate accumulator values
@@ -187,6 +188,7 @@
 - [ ] Code style and formatting consistency
 - [ ] README.md final polish
 - [ ] Examples accuracy verification
+- [ ] Fix misleading comment in README.md about max() requiring custom comparison
 
 ## Release Preparation
 
