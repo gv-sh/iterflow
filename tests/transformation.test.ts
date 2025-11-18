@@ -67,12 +67,14 @@ describe('Additional Transformation Operations', () => {
 
     describe('Functional API', () => {
       it('should concatenate multiple iterables', () => {
-        const result = Array.from(fn.concat([1, 2], [3, 4], [5, 6]));
+        const concatAll = fn.concat<number>();
+        const result = Array.from(concatAll([1, 2], [3, 4], [5, 6]));
         expect(result).toEqual([1, 2, 3, 4, 5, 6]);
       });
 
       it('should handle empty iterables', () => {
-        const result = Array.from(fn.concat([1, 2], [], [3, 4]));
+        const concatAll = fn.concat<number>();
+        const result = Array.from(concatAll([1, 2], [], [3, 4]));
         expect(result).toEqual([1, 2, 3, 4]);
       });
     });
@@ -199,7 +201,8 @@ describe('Additional Transformation Operations', () => {
 
     describe('Functional API', () => {
       it('should add index to each element', () => {
-        const result = Array.from(fn.enumerate(['a', 'b', 'c']));
+        const enumerateItems = fn.enumerate<string>();
+        const result = Array.from(enumerateItems(['a', 'b', 'c']));
         expect(result).toEqual([
           [0, 'a'],
           [1, 'b'],
@@ -208,7 +211,8 @@ describe('Additional Transformation Operations', () => {
       });
 
       it('should work with numbers', () => {
-        const result = Array.from(fn.enumerate([10, 20, 30]));
+        const enumerateItems = fn.enumerate<number>();
+        const result = Array.from(enumerateItems([10, 20, 30]));
         expect(result).toEqual([
           [0, 10],
           [1, 20],
@@ -251,12 +255,14 @@ describe('Additional Transformation Operations', () => {
 
     describe('Functional API', () => {
       it('should reverse elements', () => {
-        const result = Array.from(fn.reverse([1, 2, 3, 4, 5]));
+        const reverseItems = fn.reverse<number>();
+        const result = Array.from(reverseItems([1, 2, 3, 4, 5]));
         expect(result).toEqual([5, 4, 3, 2, 1]);
       });
 
       it('should work with strings', () => {
-        const result = Array.from(fn.reverse(['a', 'b', 'c']));
+        const reverseItems = fn.reverse<string>();
+        const result = Array.from(reverseItems(['a', 'b', 'c']));
         expect(result).toEqual(['c', 'b', 'a']);
       });
     });

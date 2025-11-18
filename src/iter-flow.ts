@@ -278,8 +278,8 @@ export class IterFlow<T> implements Iterable<T> {
 
   /**
    * Reverses the iterator order.
-   * Note: This operation requires buffering all elements in memory.
-   * This is a transformation operation that returns a new IterFlow.
+   * ⚠️ Warning: This operation buffers all elements in memory and may cause
+   * performance issues with large iterables. Consider using only when necessary.
    *
    * @returns A new IterFlow with elements in reverse order
    * @example
@@ -303,7 +303,8 @@ export class IterFlow<T> implements Iterable<T> {
   /**
    * Sorts elements using default comparison.
    * Numbers are sorted numerically, strings lexicographically.
-   * Note: This operation requires buffering all elements in memory.
+   * ⚠️ Warning: This operation buffers all elements in memory. Avoid chaining
+   * with other buffering operations (reverse, sort, sortBy) for better performance.
    *
    * @param this - IterFlow instance constrained to numbers or strings
    * @returns A new IterFlow with elements sorted
@@ -333,7 +334,8 @@ export class IterFlow<T> implements Iterable<T> {
 
   /**
    * Sorts elements using a custom comparison function.
-   * Note: This operation requires buffering all elements in memory.
+   * ⚠️ Warning: This operation buffers all elements in memory. Avoid chaining
+   * with other buffering operations (reverse, sort, sortBy) for better performance.
    *
    * @param compareFn - Function that compares two elements (returns negative if a < b, 0 if equal, positive if a > b)
    * @returns A new IterFlow with elements sorted

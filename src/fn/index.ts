@@ -341,24 +341,24 @@ export function flatMap<T, U>(
 }
 
 /**
- * Concatenates multiple iterables sequentially.
- * Yields all elements from all iterables in order.
+ * Creates a curried function that concatenates multiple iterables sequentially.
+ * Returns a function that takes any number of iterables and yields all elements in order.
  *
  * @template T The type of elements
- * @param iterables - Iterables to concatenate
- * @returns An iterable iterator with all elements
+ * @returns A function that concatenates iterables
  * @example
  * ```typescript
- * Array.from(concat([1, 2], [3, 4], [5, 6]));
+ * const concatAll = concat<number>();
+ * Array.from(concatAll([1, 2], [3, 4], [5, 6]));
  * // [1, 2, 3, 4, 5, 6]
  * ```
  */
-export function concat<T>(...iterables: Iterable<T>[]): IterableIterator<T> {
-  return (function* (): IterableIterator<T> {
+export function concat<T>(): (...iterables: Iterable<T>[]) => IterableIterator<T> {
+  return function* (...iterables: Iterable<T>[]): IterableIterator<T> {
     for (const iterable of iterables) {
       yield* iterable;
     }
-  })();
+  };
 }
 
 /**
@@ -421,50 +421,50 @@ export function scan<T, U>(
 }
 
 /**
- * Adds index as tuple with each element [index, value].
- * Creates tuples pairing each element with its zero-based index.
+ * Creates a curried function that adds index as tuple with each element [index, value].
+ * Returns a function that creates tuples pairing each element with its zero-based index.
  *
  * @template T The type of elements
- * @param iterable - The iterable to enumerate
- * @returns An iterable iterator of tuples containing [index, value]
+ * @returns A function that enumerates an iterable
  * @example
  * ```typescript
- * Array.from(enumerate(['a', 'b', 'c']));
+ * const enumerateItems = enumerate<string>();
+ * Array.from(enumerateItems(['a', 'b', 'c']));
  * // [[0, 'a'], [1, 'b'], [2, 'c']]
  * ```
  */
-export function enumerate<T>(
-  iterable: Iterable<T>,
-): IterableIterator<[number, T]> {
-  return (function* (): IterableIterator<[number, T]> {
+export function enumerate<T>(): (iterable: Iterable<T>) => IterableIterator<[number, T]> {
+  return function* (iterable: Iterable<T>): IterableIterator<[number, T]> {
     let index = 0;
     for (const value of iterable) {
       yield [index, value];
       index++;
     }
-  })();
+  };
 }
 
 /**
- * Reverses the iterator order.
- * Note: This operation requires buffering all elements in memory.
+ * Creates a curried function that reverses the iterator order.
+ * Returns a function that takes an iterable and returns an iterable iterator.
+ * ⚠️ Warning: This operation buffers all elements in memory and may cause
+ * performance issues with large iterables.
  *
  * @template T The type of elements
- * @param iterable - The iterable to reverse
- * @returns An iterable iterator with elements in reverse order
+ * @returns A function that reverses an iterable
  * @example
  * ```typescript
- * Array.from(reverse([1, 2, 3, 4, 5]));
+ * const reverseItems = reverse<number>();
+ * Array.from(reverseItems([1, 2, 3, 4, 5]));
  * // [5, 4, 3, 2, 1]
  * ```
  */
-export function reverse<T>(iterable: Iterable<T>): IterableIterator<T> {
-  return (function* (): IterableIterator<T> {
+export function reverse<T>(): (iterable: Iterable<T>) => IterableIterator<T> {
+  return function* (iterable: Iterable<T>): IterableIterator<T> {
     const buffer = Array.from(iterable);
     for (let i = buffer.length - 1; i >= 0; i--) {
       yield buffer[i]!;
     }
-  })();
+  };
 }
 
 /**
