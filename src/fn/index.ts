@@ -316,6 +316,215 @@ export function drop<T>(
   };
 }
 
+/**
+ * Creates a curried function that maps each element to an iterable and flattens the results.
+ * Returns a function that takes an iterable and returns an iterable iterator.
+ *
+ * @template T The type of input elements
+ * @template U The type of output elements
+ * @param fn - Function that maps each element to an iterable
+ * @returns A function that flat maps an iterable
+ * @example
+ * ```typescript
+ * const duplicateEach = flatMap((x: number) => [x, x * 2]);
+ * Array.from(duplicateEach([1, 2, 3])); // [1, 2, 2, 4, 3, 6]
+ * ```
+ */
+export function flatMap<T, U>(
+  fn: (value: T) => Iterable<U>,
+): (iterable: Iterable<T>) => IterableIterator<U> {
+  return function* (iterable: Iterable<T>): IterableIterator<U> {
+    for (const value of iterable) {
+      yield* fn(value);
+    }
+  };
+}
+
+/**
+ * Concatenates multiple iterables sequentially.
+ * Yields all elements from all iterables in order.
+ *
+ * @template T The type of elements
+ * @param iterables - Iterables to concatenate
+ * @returns An iterable iterator with all elements
+ * @example
+ * ```typescript
+ * Array.from(concat([1, 2], [3, 4], [5, 6]));
+ * // [1, 2, 3, 4, 5, 6]
+ * ```
+ */
+export function concat<T>(...iterables: Iterable<T>[]): IterableIterator<T> {
+  return (function* (): IterableIterator<T> {
+    for (const iterable of iterables) {
+      yield* iterable;
+    }
+  })();
+}
+
+/**
+ * Creates a curried function that inserts a separator element between each item.
+ * Returns a function that takes an iterable and returns an iterable iterator.
+ *
+ * @template T The type of elements
+ * @param separator - The element to insert between items
+ * @returns A function that intersperses an iterable
+ * @example
+ * ```typescript
+ * const addCommas = intersperse(',');
+ * Array.from(addCommas(['a', 'b', 'c']));
+ * // ['a', ',', 'b', ',', 'c']
+ * ```
+ */
+export function intersperse<T>(
+  separator: T,
+): (iterable: Iterable<T>) => IterableIterator<T> {
+  return function* (iterable: Iterable<T>): IterableIterator<T> {
+    let isFirst = true;
+    for (const value of iterable) {
+      if (!isFirst) {
+        yield separator;
+      }
+      yield value;
+      isFirst = false;
+    }
+  };
+}
+
+/**
+ * Creates a curried function that emits all intermediate accumulator values.
+ * Like reduce but yields each intermediate result.
+ *
+ * @template T The type of elements in the iterable
+ * @template U The type of the accumulated value
+ * @param fn - Function to combine the accumulator with each element
+ * @param initial - The initial value for the accumulator
+ * @returns A function that scans an iterable
+ * @example
+ * ```typescript
+ * const runningSum = scan((acc: number, x: number) => acc + x, 0);
+ * Array.from(runningSum([1, 2, 3, 4]));
+ * // [0, 1, 3, 6, 10]
+ * ```
+ */
+export function scan<T, U>(
+  fn: (accumulator: U, value: T) => U,
+  initial: U,
+): (iterable: Iterable<T>) => IterableIterator<U> {
+  return function* (iterable: Iterable<T>): IterableIterator<U> {
+    let accumulator = initial;
+    yield accumulator;
+    for (const value of iterable) {
+      accumulator = fn(accumulator, value);
+      yield accumulator;
+    }
+  };
+}
+
+/**
+ * Adds index as tuple with each element [index, value].
+ * Creates tuples pairing each element with its zero-based index.
+ *
+ * @template T The type of elements
+ * @param iterable - The iterable to enumerate
+ * @returns An iterable iterator of tuples containing [index, value]
+ * @example
+ * ```typescript
+ * Array.from(enumerate(['a', 'b', 'c']));
+ * // [[0, 'a'], [1, 'b'], [2, 'c']]
+ * ```
+ */
+export function enumerate<T>(
+  iterable: Iterable<T>,
+): IterableIterator<[number, T]> {
+  return (function* (): IterableIterator<[number, T]> {
+    let index = 0;
+    for (const value of iterable) {
+      yield [index, value];
+      index++;
+    }
+  })();
+}
+
+/**
+ * Reverses the iterator order.
+ * Note: This operation requires buffering all elements in memory.
+ *
+ * @template T The type of elements
+ * @param iterable - The iterable to reverse
+ * @returns An iterable iterator with elements in reverse order
+ * @example
+ * ```typescript
+ * Array.from(reverse([1, 2, 3, 4, 5]));
+ * // [5, 4, 3, 2, 1]
+ * ```
+ */
+export function reverse<T>(iterable: Iterable<T>): IterableIterator<T> {
+  return (function* (): IterableIterator<T> {
+    const buffer = Array.from(iterable);
+    for (let i = buffer.length - 1; i >= 0; i--) {
+      yield buffer[i]!;
+    }
+  })();
+}
+
+/**
+ * Sorts elements using default comparison.
+ * Numbers are sorted numerically, strings lexicographically.
+ * Note: This operation requires buffering all elements in memory.
+ *
+ * @param iterable - The iterable to sort
+ * @returns An iterable iterator with elements sorted
+ * @example
+ * ```typescript
+ * Array.from(sort([3, 1, 4, 1, 5]));
+ * // [1, 1, 3, 4, 5]
+ * Array.from(sort(['c', 'a', 'b']));
+ * // ['a', 'b', 'c']
+ * ```
+ */
+export function sort(
+  iterable: Iterable<number | string>,
+): IterableIterator<number | string> {
+  return (function* (): IterableIterator<number | string> {
+    const buffer = Array.from(iterable);
+    buffer.sort((a, b) => {
+      if (typeof a === 'number' && typeof b === 'number') {
+        return a - b;
+      }
+      return String(a).localeCompare(String(b));
+    });
+    yield* buffer;
+  })();
+}
+
+/**
+ * Creates a curried function that sorts elements using a custom comparison function.
+ * Returns a function that takes an iterable and returns an iterable iterator.
+ * Note: This operation requires buffering all elements in memory.
+ *
+ * @template T The type of elements
+ * @param compareFn - Function that compares two elements
+ * @returns A function that sorts an iterable
+ * @example
+ * ```typescript
+ * const sortAsc = sortBy((a: number, b: number) => a - b);
+ * Array.from(sortAsc([3, 1, 4, 1, 5]));
+ * // [1, 1, 3, 4, 5]
+ * const sortDesc = sortBy((a: number, b: number) => b - a);
+ * Array.from(sortDesc([3, 1, 4, 1, 5]));
+ * // [5, 4, 3, 1, 1]
+ * ```
+ */
+export function sortBy<T>(
+  compareFn: (a: T, b: T) => number,
+): (iterable: Iterable<T>) => IterableIterator<T> {
+  return function* (iterable: Iterable<T>): IterableIterator<T> {
+    const buffer = Array.from(iterable);
+    buffer.sort(compareFn);
+    yield* buffer;
+  };
+}
+
 // Windowing operations
 /**
  * Creates a curried function that creates a sliding window of the specified size.
