@@ -168,6 +168,198 @@ export class IterFlow<T> implements Iterable<T> {
     });
   }
 
+  /**
+   * Concatenates multiple iterators sequentially.
+   * Yields all elements from this iterator, then from each provided iterator.
+   *
+   * @param iterables - Additional iterables to concatenate
+   * @returns A new IterFlow with all elements from all iterables
+   * @example
+   * ```typescript
+   * iter([1, 2]).concat([3, 4], [5, 6]).toArray();
+   * // [1, 2, 3, 4, 5, 6]
+   * ```
+   */
+  concat(...iterables: Iterable<T>[]): IterFlow<T> {
+    const self = this;
+    return new IterFlow({
+      *[Symbol.iterator]() {
+        yield* self;
+        for (const iterable of iterables) {
+          yield* iterable;
+        }
+      },
+    });
+  }
+
+  /**
+   * Inserts a separator element between each item.
+   * The separator is not added before the first element or after the last.
+   *
+   * @param separator - The element to insert between items
+   * @returns A new IterFlow with separators interspersed
+   * @example
+   * ```typescript
+   * iter([1, 2, 3]).intersperse(0).toArray();
+   * // [1, 0, 2, 0, 3]
+   * iter(['a', 'b', 'c']).intersperse('-').toArray();
+   * // ['a', '-', 'b', '-', 'c']
+   * ```
+   */
+  intersperse(separator: T): IterFlow<T> {
+    const self = this;
+    return new IterFlow({
+      *[Symbol.iterator]() {
+        let isFirst = true;
+        for (const value of self) {
+          if (!isFirst) {
+            yield separator;
+          }
+          yield value;
+          isFirst = false;
+        }
+      },
+    });
+  }
+
+  /**
+   * Like reduce, but emits all intermediate accumulator values.
+   * Similar to reduce but returns an iterator of partial results.
+   *
+   * @template U The type of the accumulated value
+   * @param fn - Function to combine the accumulator with each element
+   * @param initial - The initial value for the accumulator
+   * @returns A new IterFlow of intermediate accumulator values
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4]).scan((acc, x) => acc + x, 0).toArray();
+   * // [0, 1, 3, 6, 10]
+   * iter([1, 2, 3]).scan((acc, x) => acc * x, 1).toArray();
+   * // [1, 1, 2, 6]
+   * ```
+   */
+  scan<U>(fn: (accumulator: U, value: T) => U, initial: U): IterFlow<U> {
+    const self = this;
+    return new IterFlow({
+      *[Symbol.iterator]() {
+        let accumulator = initial;
+        yield accumulator;
+        for (const value of self) {
+          accumulator = fn(accumulator, value);
+          yield accumulator;
+        }
+      },
+    });
+  }
+
+  /**
+   * Adds index as tuple with each element [index, value].
+   * Creates tuples pairing each element with its zero-based index.
+   *
+   * @returns A new IterFlow of tuples containing [index, value]
+   * @example
+   * ```typescript
+   * iter(['a', 'b', 'c']).enumerate().toArray();
+   * // [[0, 'a'], [1, 'b'], [2, 'c']]
+   * ```
+   */
+  enumerate(): IterFlow<[number, T]> {
+    const self = this;
+    return new IterFlow({
+      *[Symbol.iterator]() {
+        let index = 0;
+        for (const value of self) {
+          yield [index, value];
+          index++;
+        }
+      },
+    });
+  }
+
+  /**
+   * Reverses the iterator order.
+   * ⚠️ Warning: This operation buffers all elements in memory and may cause
+   * performance issues with large iterables. Consider using only when necessary.
+   *
+   * @returns A new IterFlow with elements in reverse order
+   * @example
+   * ```typescript
+   * iter([1, 2, 3, 4, 5]).reverse().toArray();
+   * // [5, 4, 3, 2, 1]
+   * ```
+   */
+  reverse(): IterFlow<T> {
+    const self = this;
+    return new IterFlow({
+      *[Symbol.iterator]() {
+        const buffer = Array.from(self);
+        for (let i = buffer.length - 1; i >= 0; i--) {
+          yield buffer[i]!;
+        }
+      },
+    });
+  }
+
+  /**
+   * Sorts elements using default comparison.
+   * Numbers are sorted numerically, strings lexicographically.
+   * ⚠️ Warning: This operation buffers all elements in memory. Avoid chaining
+   * with other buffering operations (reverse, sort, sortBy) for better performance.
+   *
+   * @param this - IterFlow instance constrained to numbers or strings
+   * @returns A new IterFlow with elements sorted
+   * @example
+   * ```typescript
+   * iter([3, 1, 4, 1, 5]).sort().toArray();
+   * // [1, 1, 3, 4, 5]
+   * iter(['c', 'a', 'b']).sort().toArray();
+   * // ['a', 'b', 'c']
+   * ```
+   */
+  sort(this: IterFlow<number | string>): IterFlow<number | string> {
+    const self = this;
+    return new IterFlow({
+      *[Symbol.iterator]() {
+        const buffer = Array.from(self);
+        buffer.sort((a, b) => {
+          if (typeof a === 'number' && typeof b === 'number') {
+            return a - b;
+          }
+          return String(a).localeCompare(String(b));
+        });
+        yield* buffer;
+      },
+    });
+  }
+
+  /**
+   * Sorts elements using a custom comparison function.
+   * ⚠️ Warning: This operation buffers all elements in memory. Avoid chaining
+   * with other buffering operations (reverse, sort, sortBy) for better performance.
+   *
+   * @param compareFn - Function that compares two elements (returns negative if a < b, 0 if equal, positive if a > b)
+   * @returns A new IterFlow with elements sorted
+   * @example
+   * ```typescript
+   * iter([3, 1, 4, 1, 5]).sortBy((a, b) => a - b).toArray();
+   * // [1, 1, 3, 4, 5]
+   * iter([3, 1, 4, 1, 5]).sortBy((a, b) => b - a).toArray();
+   * // [5, 4, 3, 1, 1]
+   * iter(['alice', 'bob', 'charlie']).sortBy((a, b) => a.length - b.length).toArray();
+   * // ['bob', 'alice', 'charlie']
+   * ```
+   */
+  sortBy(compareFn: (a: T, b: T) => number): IterFlow<T> {
+    const self = this;
+    return new IterFlow({
+      *[Symbol.iterator]() {
+        const buffer = Array.from(self);
+        buffer.sort(compareFn);
+        yield* buffer;
+      },
+    });
+  }
+
   // Terminal operations (consume the iterator)
   /**
    * Collects all elements into an array.
