@@ -30,12 +30,12 @@
 - [x] `chain()` - Chain iterators sequentially (similar to concat but different API)
 
 ### Advanced Statistical Operations
-- [ ] `mode()` - Find most frequent value(s) in dataset
-- [ ] `quartiles()` - Calculate Q1, Q2 (median), Q3 values
-- [ ] `range()` - Calculate span from min to max value
-- [ ] `product()` - Calculate product of all numeric values
-- [ ] `covariance()` - Covariance between two numeric sequences
-- [ ] `correlation()` - Pearson correlation coefficient between sequences
+- [x] `mode()` - Find most frequent value(s) in dataset
+- [x] `quartiles()` - Calculate Q1, Q2 (median), Q3 values
+- [x] `span()` - Calculate span from min to max value
+- [x] `product()` - Calculate product of all numeric values
+- [x] `covariance()` - Covariance between two numeric sequences
+- [x] `correlation()` - Pearson correlation coefficient between sequences
 
 ## Testing & Quality
 
