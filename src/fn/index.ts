@@ -1558,17 +1558,16 @@ export function merge<T>(
   ...iterables: Iterable<T>[]
 ): IterableIterator<T>;
 export function merge<T>(
-  ...args:
-    | [Iterable<T>[], ...Iterable<T>[]]
-    | [(a: T, b: T) => number, ...Iterable<T>[]]
+  compareFnOrIterable?: ((a: T, b: T) => number) | Iterable<T>,
+  ...iterables: Iterable<T>[]
 ): IterableIterator<T> {
   let compareFn: (a: T, b: T) => number;
-  let iterables: Iterable<T>[];
+  let actualIterables: Iterable<T>[];
 
   // Check if first argument is a function (comparator)
-  if (typeof args[0] === "function") {
-    compareFn = args[0] as (a: T, b: T) => number;
-    iterables = args.slice(1) as Iterable<T>[];
+  if (typeof compareFnOrIterable === "function") {
+    compareFn = compareFnOrIterable as (a: T, b: T) => number;
+    actualIterables = iterables;
   } else {
     // Default comparator for numbers/strings
     compareFn = (a: T, b: T) => {
@@ -1576,11 +1575,11 @@ export function merge<T>(
       if (a > b) return 1;
       return 0;
     };
-    iterables = args as Iterable<T>[];
+    actualIterables = compareFnOrIterable !== undefined ? [compareFnOrIterable, ...iterables] : iterables;
   }
 
   return (function* (): IterableIterator<T> {
-    if (iterables.length === 0) return;
+    if (actualIterables.length === 0) return;
 
     // Initialize all iterators with their first value
     const heap: Array<{
@@ -1589,8 +1588,8 @@ export function merge<T>(
       index: number;
     }> = [];
 
-    for (let i = 0; i < iterables.length; i++) {
-      const iterator = iterables[i]![Symbol.iterator]();
+    for (let i = 0; i < actualIterables.length; i++) {
+      const iterator = actualIterables[i]![Symbol.iterator]();
       const result = iterator.next();
       if (!result.done) {
         heap.push({ value: result.value, iterator, index: i });
