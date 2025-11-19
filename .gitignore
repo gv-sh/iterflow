@@ -89,3 +89,6 @@ pids/
 # Temporary folders
 tmp/
 temp/
+
+# TypeDoc generated documentation
+docs/api-generated/
