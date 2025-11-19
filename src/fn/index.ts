@@ -1673,3 +1673,24 @@ export function chain<T>(...iterables: Iterable<T>[]): IterableIterator<T> {
     }
   })();
 }
+
+// Composition utilities
+export {
+  pipe,
+  compose,
+  createOperation,
+  // Transducers
+  mapTransducer,
+  filterTransducer,
+  takeTransducer,
+  composeTransducers,
+  transduce,
+  transducerToIterator,
+  reduced,
+  isReduced,
+  // Types
+  type IterableTransformer,
+  type TerminalOperation,
+  type Transducer,
+  type Reducer,
+} from "./composition.js";
