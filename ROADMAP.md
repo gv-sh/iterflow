@@ -62,16 +62,16 @@
 - [ ] Tree-shaking verification with rollup/webpack
 
 ### Type Safety
-- [ ] Exhaustive TypeScript type tests for all operations
-- [ ] Test type narrowing and inference edge cases
-- [ ] Ensure no `any` types in public API
-- [ ] Add dtslint or similar for type testing
+- [x] Exhaustive TypeScript type tests for all operations
+- [x] Test type narrowing and inference edge cases
+- [x] Ensure no `any` types in public API
+- [x] Add dtslint or similar for type testing
 
 ## Documentation
 
 ### API Documentation
 - [x] JSDoc comments for all public methods and functions
-- [ ] Complete API reference page with all methods
+- [x] Complete API reference page with all methods
 - [ ] Code examples for every single operation
 - [ ] TypeDoc auto-generated documentation setup
 - [ ] API quick reference cheat sheet
