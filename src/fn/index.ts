@@ -1558,9 +1558,7 @@ export function merge<T>(
   ...iterables: Iterable<T>[]
 ): IterableIterator<T>;
 export function merge<T>(
-  ...args:
-    | [Iterable<T>[], ...Iterable<T>[]]
-    | [(a: T, b: T) => number, ...Iterable<T>[]]
+  ...args: (Iterable<T> | ((a: T, b: T) => number))[]
 ): IterableIterator<T> {
   let compareFn: (a: T, b: T) => number;
   let iterables: Iterable<T>[];

@@ -26,6 +26,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:types": "tsd",
     "bench": "vitest bench",
     "bench:transformations": "vitest bench benchmarks/transformations.bench.ts",
     "bench:terminals": "vitest bench benchmarks/terminals.bench.ts",
@@ -36,7 +37,7 @@
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "docs": "typedoc src/index.ts",
-    "prepublishOnly": "npm run build && npm test"
+    "prepublishOnly": "npm run build && npm test && npm run test:types"
   },
   "keywords": [
     "iterator",
@@ -88,6 +89,7 @@
     "lodash": "^4.17.21",
     "prettier": "^3.0.0",
     "ramda": "^0.32.0",
+    "tsd": "^0.33.0",
     "tsup": "^8.0.0",
     "typedoc": "^0.26.0",
     "typescript": "^5.6.0",
