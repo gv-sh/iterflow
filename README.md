@@ -457,6 +457,8 @@ const adults = iter([
 
 ## Performance
 
+### Lazy Evaluation
+
 iterflow uses lazy evaluation, meaning operations are only computed when needed:
 
 ```typescript
@@ -469,6 +471,41 @@ const results = expensiveOperation.toArray(); // Now computed, only for first 5 
 ```
 
 This makes it efficient for processing large datasets or infinite sequences.
+
+### Performance Characteristics
+
+**When iterflow excels:**
+- **Early termination**: Operations like `find()`, `some()`, `take()` benefit from lazy evaluation
+- **Large pipelines**: Multiple transformations on large datasets with minimal memory overhead
+- **Windowing operations**: Memory-efficient sliding windows and chunking
+- **Generator integration**: Working with infinite or very large sequences
+- **Statistical operations**: Built-in optimized implementations for `mean()`, `median()`, `variance()`, etc.
+
+**When native arrays may be faster:**
+- Small arrays (< 1000 items) where native method overhead is minimal
+- Full materialization scenarios where all results are needed
+- Single operations on entire arrays
+
+### Benchmarks
+
+We maintain a comprehensive benchmark suite comparing iterflow against native array methods, lodash, and ramda:
+
+```bash
+# Run all benchmarks
+npm run bench
+
+# Run specific benchmark categories
+npm run bench:transformations  # Map, filter, take, etc.
+npm run bench:terminals        # Reduce, find, some, every
+npm run bench:statistics       # Sum, mean, median, variance
+npm run bench:windowing        # Chunk, window, partition
+npm run bench:lazy             # Lazy evaluation benefits
+npm run bench:memory           # Memory efficiency profiling
+```
+
+For detailed benchmark results and methodology, see [BENCHMARKS.md](./BENCHMARKS.md).
+
+Performance benchmarks run automatically in CI on every pull request and push to main.
 
 ## Browser Support
 

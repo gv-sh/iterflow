@@ -11,9 +11,14 @@ export default defineConfig({
         'node_modules/',
         'dist/',
         'tests/',
+        'benchmarks/',
         '**/*.config.*',
         '**/*.d.ts'
       ]
+    },
+    benchmark: {
+      include: ['benchmarks/**/*.bench.ts'],
+      exclude: ['node_modules', 'dist'],
     }
   }
 });

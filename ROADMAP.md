@@ -47,12 +47,12 @@
 - [x] Error handling tests for invalid inputs
 
 ### Performance & Benchmarking
-- [ ] Set up benchmark suite using vitest benchmark API
-- [ ] Benchmark against native array methods (map, filter, reduce, etc.)
-- [ ] Benchmark against lodash and ramda where comparable
-- [ ] Memory usage profiling for windowing operations
-- [ ] Performance regression tests in CI pipeline
-- [ ] Document performance characteristics in README
+- [x] Set up benchmark suite using vitest benchmark API
+- [x] Benchmark against native array methods (map, filter, reduce, etc.)
+- [x] Benchmark against lodash and ramda where comparable
+- [x] Memory usage profiling for windowing operations
+- [x] Performance regression tests in CI pipeline
+- [x] Document performance characteristics in README
 
 ### Cross-Platform Testing
 - [ ] Browser testing in Chrome, Firefox, Safari, Edge
