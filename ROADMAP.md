@@ -40,11 +40,11 @@
 ## Testing & Quality
 
 ### Functional API Testing
-- [ ] Complete test suite for `src/fn/index.ts` (currently 0% coverage)
-- [ ] Integration tests between wrapper and functional APIs
-- [ ] Property-based testing using fast-check library
-- [ ] Edge case testing: empty iterators, single element, infinite sequences
-- [ ] Error handling tests for invalid inputs
+- [x] Complete test suite for `src/fn/index.ts` (currently 0% coverage)
+- [x] Integration tests between wrapper and functional APIs
+- [x] Property-based testing using fast-check library
+- [x] Edge case testing: empty iterators, single element, infinite sequences
+- [x] Error handling tests for invalid inputs
 
 ### Performance & Benchmarking
 - [ ] Set up benchmark suite using vitest benchmark API
