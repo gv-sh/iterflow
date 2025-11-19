@@ -186,12 +186,39 @@ array.map(transform);
 
 ## Continuous Integration
 
-Performance benchmarks run automatically on:
-- **Push to main/master**: Full benchmark suite
-- **Pull requests**: Full benchmark suite with results commented on PR
-- **Manual trigger**: Via GitHub Actions workflow dispatch
+To enable automated performance benchmarks in CI, add a GitHub Actions workflow file at `.github/workflows/performance.yml`.
 
-Benchmark results are stored as artifacts for 90 days for historical comparison.
+**Recommended workflow features:**
+- **Push to main/master**: Run full benchmark suite
+- **Pull requests**: Run full benchmark suite with results commented on PR
+- **Manual trigger**: Allow workflow dispatch for on-demand runs
+- **Artifacts**: Store benchmark results for 90 days for historical comparison
+- **Matrix strategy**: Run individual benchmark suites in parallel
+
+**Example workflow configuration:**
+```yaml
+name: Performance Benchmarks
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm run bench
+```
+
+For a complete workflow example with PR comments and artifact uploads, see the project's GitHub discussions or issues.
 
 ## Contributing
 
