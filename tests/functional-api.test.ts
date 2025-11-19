@@ -156,8 +156,8 @@ describe('Functional API', () => {
       });
 
       it('should throw error for invalid percentile', () => {
-        expect(() => fn.percentile([1, 2, 3], -1)).toThrow('Percentile must be between 0 and 100');
-        expect(() => fn.percentile([1, 2, 3], 101)).toThrow('Percentile must be between 0 and 100');
+        expect(() => fn.percentile([1, 2, 3], -1)).toThrow('percentile must be between 0 and 100');
+        expect(() => fn.percentile([1, 2, 3], 101)).toThrow('percentile must be between 0 and 100');
       });
 
       it('should return undefined for empty iterator', () => {
@@ -547,8 +547,8 @@ describe('Functional API', () => {
       });
 
       it('should throw for invalid window size', () => {
-        expect(() => fn.window(0)).toThrow('Window size must be at least 1');
-        expect(() => fn.window(-1)).toThrow('Window size must be at least 1');
+        expect(() => fn.window(0)).toThrow('size must be at least 1');
+        expect(() => fn.window(-1)).toThrow('size must be at least 1');
       });
 
       it('should handle window size of 1', () => {
@@ -569,8 +569,8 @@ describe('Functional API', () => {
       });
 
       it('should throw for invalid chunk size', () => {
-        expect(() => fn.chunk(0)).toThrow('Chunk size must be at least 1');
-        expect(() => fn.chunk(-1)).toThrow('Chunk size must be at least 1');
+        expect(() => fn.chunk(0)).toThrow('size must be at least 1');
+        expect(() => fn.chunk(-1)).toThrow('size must be at least 1');
       });
 
       it('should work with empty iterables', () => {
@@ -972,7 +972,7 @@ describe('Functional API', () => {
       });
 
       it('should throw for zero step', () => {
-        expect(() => Array.from(fn.range(0, 10, 0))).toThrow('Range step cannot be zero');
+        expect(() => Array.from(fn.range(0, 10, 0))).toThrow('step cannot be zero');
       });
 
       it('should handle empty range', () => {

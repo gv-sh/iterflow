@@ -1,4 +1,5 @@
 import { IterFlow } from "./iter-flow.js";
+import { validateNonZero } from "./validation.js";
 
 /**
  * Creates an iterflow instance from an iterable.
@@ -134,9 +135,7 @@ export namespace iter {
 
     return new IterFlow({
       *[Symbol.iterator]() {
-        if (step === 0) {
-          throw new Error("Range step cannot be zero");
-        }
+        validateNonZero(step, 'step', 'range');
 
         if (step > 0) {
           for (let i = actualStart; i < actualStop; i += step) {
@@ -372,3 +371,62 @@ export { IterFlow } from "./iter-flow.js";
 
 // Export async functionality
 export { AsyncIterflow, asyncIter } from "./async-iter-flow.js";
+
+// Export error handling
+export {
+  IterFlowError,
+  ValidationError,
+  OperationError,
+  EmptySequenceError,
+  IndexOutOfBoundsError,
+  TypeConversionError,
+} from "./errors.js";
+
+// Export validation utilities
+export {
+  validatePositiveInteger,
+  validateNonNegativeInteger,
+  validateRange,
+  validateFiniteNumber,
+  validateNonZero,
+  validateFunction,
+  validateIterable,
+  validateComparator,
+  validateNonEmpty,
+  toNumber,
+  toInteger,
+  validateIndex,
+} from "./validation.js";
+
+// Export debug utilities
+export {
+  enableDebug,
+  disableDebug,
+  isDebugEnabled,
+  getDebugConfig,
+  addTrace,
+  getTraces,
+  clearTraces,
+  getTracesForOperation,
+  getTraceSummary,
+  traceOperation,
+  traceOperationAsync,
+} from "./debug.js";
+export type { TraceEntry, DebugConfig } from "./debug.js";
+
+// Export error recovery utilities
+export {
+  withErrorRecovery,
+  withRetry,
+  withRetryAsync,
+  withDefault,
+  tryOr,
+  tryCatch,
+  tryCatchAsync,
+  toResult,
+  toResultAsync,
+  safePredicate,
+  safeComparator,
+  errorBoundary,
+} from "./recovery.js";
+export type { ErrorHandler, RetryOptions, Result } from "./recovery.js";

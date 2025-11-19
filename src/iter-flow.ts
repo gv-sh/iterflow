@@ -1,3 +1,5 @@
+import { validateRange, validatePositiveInteger } from './validation.js';
+
 /**
  * A fluent interface wrapper for working with iterators and iterables.
  * Provides chainable methods for transforming, filtering, and analyzing data streams.
@@ -579,9 +581,7 @@ export class IterFlow<T> implements Iterable<T> {
    * ```
    */
   percentile(this: IterFlow<number>, p: number): number | undefined {
-    if (p < 0 || p > 100) {
-      throw new Error("Percentile must be between 0 and 100");
-    }
+    validateRange(p, 0, 100, 'percentile', 'percentile');
 
     const values = this.toArray();
     if (values.length === 0) return undefined;
@@ -860,9 +860,7 @@ export class IterFlow<T> implements Iterable<T> {
    * ```
    */
   window(size: number): IterFlow<T[]> {
-    if (size < 1) {
-      throw new Error("Window size must be at least 1");
-    }
+    validatePositiveInteger(size, 'size', 'window');
 
     const self = this;
     return new IterFlow({
@@ -904,9 +902,7 @@ export class IterFlow<T> implements Iterable<T> {
    * ```
    */
   chunk(size: number): IterFlow<T[]> {
-    if (size < 1) {
-      throw new Error("Chunk size must be at least 1");
-    }
+    validatePositiveInteger(size, 'size', 'chunk');
 
     const self = this;
     return new IterFlow({

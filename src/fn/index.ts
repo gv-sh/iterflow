@@ -1,6 +1,8 @@
 // Functional API exports - for functional programming style usage
 // Usage: import { sum, filter, map } from 'iterflow/fn';
 
+import { validateRange, validatePositiveInteger, validateNonZero } from '../validation.js';
+
 // Statistical operations
 /**
  * Calculates the sum of all numeric elements in an iterable.
@@ -194,9 +196,7 @@ export function percentile(
   iterable: Iterable<number>,
   p: number,
 ): number | undefined {
-  if (p < 0 || p > 100) {
-    throw new Error("Percentile must be between 0 and 100");
-  }
+  validateRange(p, 0, 100, 'percentile', 'percentile');
 
   const values = Array.from(iterable);
   if (values.length === 0) return undefined;
@@ -774,9 +774,7 @@ export function sortBy<T>(
 export function window<T>(
   size: number,
 ): (iterable: Iterable<T>) => IterableIterator<T[]> {
-  if (size < 1) {
-    throw new Error("Window size must be at least 1");
-  }
+  validatePositiveInteger(size, 'size', 'window');
 
   return function* (iterable: Iterable<T>): IterableIterator<T[]> {
     // Use circular buffer to avoid O(n) shift() operations
@@ -819,9 +817,7 @@ export function window<T>(
 export function chunk<T>(
   size: number,
 ): (iterable: Iterable<T>) => IterableIterator<T[]> {
-  if (size < 1) {
-    throw new Error("Chunk size must be at least 1");
-  }
+  validatePositiveInteger(size, 'size', 'chunk');
 
   return function* (iterable: Iterable<T>): IterableIterator<T[]> {
     // Preallocate buffer to avoid dynamic resizing
@@ -1470,9 +1466,7 @@ export function range(
   const actualStop = stop === undefined ? startOrStop : stop;
 
   return (function* (): IterableIterator<number> {
-    if (step === 0) {
-      throw new Error("Range step cannot be zero");
-    }
+    validateNonZero(step, 'step', 'range');
 
     if (step > 0) {
       for (let i = actualStart; i < actualStop; i += step) {
