@@ -86,12 +86,12 @@
 - [x] Common patterns and recipes document
 
 ### Advanced Examples
-- [ ] Time series analysis with moving averages
-- [ ] Log file processing and parsing
-- [ ] CSV streaming and transformation
-- [ ] JSON data pipeline processing
-- [ ] Real-time data stream filtering
-- [ ] Statistical analysis workflow examples
+- [x] Time series analysis with moving averages
+- [x] Log file processing and parsing
+- [x] CSV streaming and transformation
+- [x] JSON data pipeline processing
+- [x] Real-time data stream filtering
+- [x] Statistical analysis workflow examples
 
 ### Comparison Documentation
 - [ ] Comparison with lodash methods
