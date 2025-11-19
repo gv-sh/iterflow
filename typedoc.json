@@ -1,0 +1,36 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs/api-generated",
+  "name": "IterFlow API Documentation",
+  "readme": "README.md",
+  "plugin": [],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "includeVersion": true,
+  "sort": ["source-order"],
+  "navigation": {
+    "includeCategories": true,
+    "includeGroups": true
+  },
+  "categorizeByGroup": true,
+  "categoryOrder": [
+    "Creating Iterators",
+    "Combining Iterators",
+    "Transformation Methods",
+    "Windowing Operations",
+    "Statistical Operations",
+    "Set Operations",
+    "Grouping Operations",
+    "Utility Operations",
+    "Terminal Operations",
+    "*"
+  ],
+  "searchInComments": true,
+  "visibilityFilters": {
+    "protected": false,
+    "private": false,
+    "inherited": true,
+    "external": false
+  }
+}
