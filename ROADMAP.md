@@ -134,13 +134,13 @@
 ## Ecosystem & Integration
 
 ### Framework Integration Examples
-- [ ] React hooks integration example
-- [ ] Vue composables integration example
-- [ ] Node.js streams adapter
-- [ ] Web Streams API integration
-- [ ] RxJS interoperability example
-- [ ] Express middleware example
-- [ ] Fastify plugin example
+- [x] React hooks integration example
+- [x] Vue composables integration example
+- [x] Node.js streams adapter
+- [x] Web Streams API integration
+- [x] RxJS interoperability example
+- [x] Express middleware example
+- [x] Fastify plugin example
 
 ### Developer Tools
 - [ ] ESLint plugin for best practices (optional)
