@@ -367,5 +367,8 @@ export namespace iter {
   }
 }
 
-// Export the class as well
+// Export the sync class
 export { IterFlow } from "./iter-flow.js";
+
+// Export async functionality
+export { AsyncIterflow, asyncIter } from "./async-iter-flow.js";
