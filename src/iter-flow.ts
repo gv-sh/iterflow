@@ -531,9 +531,15 @@ export class IterFlow<T> implements Iterable<T> {
     if (values.length === 0) return undefined;
 
     const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
-    const squaredDiffs = values.map((val) => Math.pow(val - mean, 2));
 
-    return squaredDiffs.reduce((sum, diff) => sum + diff, 0) / values.length;
+    // Optimize: calculate sum of squared differences in single pass without intermediate array
+    let sumSquaredDiffs = 0;
+    for (let i = 0; i < values.length; i++) {
+      const diff = values[i] - mean;
+      sumSquaredDiffs += diff * diff;
+    }
+
+    return sumSquaredDiffs / values.length;
   }
 
   /**
@@ -861,14 +867,23 @@ export class IterFlow<T> implements Iterable<T> {
     const self = this;
     return new IterFlow({
       *[Symbol.iterator]() {
-        const buffer: T[] = [];
+        // Use circular buffer to avoid O(n) shift() operations
+        const buffer: T[] = new Array(size);
+        let count = 0;
+        let index = 0;
 
         for (const value of self) {
-          buffer.push(value);
+          buffer[index] = value;
+          count++;
+          index = (index + 1) % size;
 
-          if (buffer.length === size) {
-            yield [...buffer];
-            buffer.shift();
+          if (count >= size) {
+            // Build window array in correct order from circular buffer
+            const window = new Array(size);
+            for (let i = 0; i < size; i++) {
+              window[i] = buffer[(index + i) % size];
+            }
+            yield window;
           }
         }
       },
@@ -896,19 +911,23 @@ export class IterFlow<T> implements Iterable<T> {
     const self = this;
     return new IterFlow({
       *[Symbol.iterator]() {
-        let buffer: T[] = [];
+        // Preallocate buffer to avoid dynamic resizing
+        let buffer: T[] = new Array(size);
+        let bufferIndex = 0;
 
         for (const value of self) {
-          buffer.push(value);
+          buffer[bufferIndex++] = value;
 
-          if (buffer.length === size) {
+          if (bufferIndex === size) {
             yield buffer;
-            buffer = [];
+            buffer = new Array(size);
+            bufferIndex = 0;
           }
         }
 
-        if (buffer.length > 0) {
-          yield buffer;
+        if (bufferIndex > 0) {
+          // Slice to remove unused preallocated slots
+          yield buffer.slice(0, bufferIndex);
         }
       },
     });
