@@ -77,13 +77,13 @@
 - [x] API quick reference cheat sheet
 
 ### Guides & Tutorials
-- [ ] Getting Started guide for beginners
-- [ ] Migration guide from array methods to iterflow
-- [ ] Performance optimization guide (when to use what)
-- [ ] Working with infinite sequences guide
-- [ ] TypeScript integration best practices
-- [ ] Wrapper vs Functional API decision guide
-- [ ] Common patterns and recipes document
+- [x] Getting Started guide for beginners
+- [x] Migration guide from array methods to iterflow
+- [x] Performance optimization guide (when to use what)
+- [x] Working with infinite sequences guide
+- [x] TypeScript integration best practices
+- [x] Wrapper vs Functional API decision guide
+- [x] Common patterns and recipes document
 
 ### Advanced Examples
 - [ ] Time series analysis with moving averages
