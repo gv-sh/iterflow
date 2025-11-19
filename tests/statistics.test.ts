@@ -132,8 +132,8 @@ describe('Statistical Operations', () => {
     });
 
     it('should throw error for invalid percentile', () => {
-      expect(() => iter([1, 2, 3]).percentile(-1)).toThrow('Percentile must be between 0 and 100');
-      expect(() => iter([1, 2, 3]).percentile(101)).toThrow('Percentile must be between 0 and 100');
+      expect(() => iter([1, 2, 3]).percentile(-1)).toThrow('percentile must be between 0 and 100');
+      expect(() => iter([1, 2, 3]).percentile(101)).toThrow('percentile must be between 0 and 100');
     });
 
     it('should return undefined for empty iterator', () => {

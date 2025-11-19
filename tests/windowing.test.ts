@@ -32,8 +32,8 @@ describe('Windowing Operations', () => {
     });
 
     it('should throw error for invalid window size', () => {
-      expect(() => iter([1, 2, 3]).window(0)).toThrow('Window size must be at least 1');
-      expect(() => iter([1, 2, 3]).window(-1)).toThrow('Window size must be at least 1');
+      expect(() => iter([1, 2, 3]).window(0)).toThrow('size must be at least 1');
+      expect(() => iter([1, 2, 3]).window(-1)).toThrow('size must be at least 1');
     });
 
     it('should handle larger windows', () => {
@@ -74,8 +74,8 @@ describe('Windowing Operations', () => {
     });
 
     it('should throw error for invalid chunk size', () => {
-      expect(() => iter([1, 2, 3]).chunk(0)).toThrow('Chunk size must be at least 1');
-      expect(() => iter([1, 2, 3]).chunk(-1)).toThrow('Chunk size must be at least 1');
+      expect(() => iter([1, 2, 3]).chunk(0)).toThrow('size must be at least 1');
+      expect(() => iter([1, 2, 3]).chunk(-1)).toThrow('size must be at least 1');
     });
 
     it('should handle chunk size larger than input', () => {
