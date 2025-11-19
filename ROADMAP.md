@@ -112,10 +112,10 @@
 - [x] Error handling in async pipelines
 
 ### Composition Utilities
-- [ ] `pipe()` function for left-to-right composition
-- [ ] `compose()` function for right-to-left composition
-- [ ] Helper for creating custom operations
-- [ ] Transducers support (investigate feasibility)
+- [x] `pipe()` function for left-to-right composition
+- [x] `compose()` function for right-to-left composition
+- [x] Helper for creating custom operations
+- [x] Transducers support (investigate feasibility)
 
 ### Performance Optimizations
 - [ ] Lazy evaluation verification and optimization
