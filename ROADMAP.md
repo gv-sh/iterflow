@@ -72,9 +72,9 @@
 ### API Documentation
 - [x] JSDoc comments for all public methods and functions
 - [x] Complete API reference page with all methods
-- [ ] Code examples for every single operation
-- [ ] TypeDoc auto-generated documentation setup
-- [ ] API quick reference cheat sheet
+- [x] Code examples for every single operation
+- [x] TypeDoc auto-generated documentation setup
+- [x] API quick reference cheat sheet
 
 ### Guides & Tutorials
 - [ ] Getting Started guide for beginners
@@ -103,13 +103,13 @@
 ## Advanced Features
 
 ### Async Iterator Support
-- [ ] `AsyncIterflow` class for async iterators
-- [ ] Async versions of all transformation operations
-- [ ] Async versions of all terminal operations
-- [ ] Async statistical operations
-- [ ] Concurrent/parallel processing options
-- [ ] Backpressure handling strategies
-- [ ] Error handling in async pipelines
+- [x] `AsyncIterflow` class for async iterators
+- [x] Async versions of all transformation operations
+- [x] Async versions of all terminal operations
+- [x] Async statistical operations
+- [x] Concurrent/parallel processing options
+- [x] Backpressure handling strategies
+- [x] Error handling in async pipelines
 
 ### Composition Utilities
 - [ ] `pipe()` function for left-to-right composition
