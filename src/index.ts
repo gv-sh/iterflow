@@ -430,3 +430,15 @@ export {
   errorBoundary,
 } from "./recovery.js";
 export type { ErrorHandler, RetryOptions, Result } from "./recovery.js";
+
+// Export deprecation utilities
+export {
+  configureDeprecation,
+  getDeprecationConfig,
+  clearDeprecationWarnings,
+  deprecate,
+  deprecated,
+  deprecatedFunction,
+  hasDeprecationWarning,
+} from "./deprecation.js";
+export type { DeprecationConfig, DeprecationWarning } from "./deprecation.js";
