@@ -37,6 +37,9 @@
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "docs": "typedoc src/index.ts",
+    "changelog": "node scripts/generate-changelog.js",
+    "release": "node scripts/release.js",
+    "validate-commits": "node scripts/validate-commits.js",
     "prepublishOnly": "npm run build && npm test && npm run test:types"
   },
   "keywords": [

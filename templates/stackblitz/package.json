@@ -1,0 +1,20 @@
+{
+  "name": "iterflow-stackblitz-starter",
+  "version": "1.0.0",
+  "description": "Iterflow starter template for StackBlitz",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "iterflow": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0"
+  }
+}

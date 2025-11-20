@@ -1,0 +1,45 @@
+{
+  "name": "vscode-iterflow",
+  "displayName": "Iterflow Snippets",
+  "description": "Code snippets for iterflow - powerful iterator utilities for TypeScript/JavaScript",
+  "version": "0.1.0",
+  "publisher": "gv-sh",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Snippets",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "iterflow",
+    "iterator",
+    "snippets",
+    "typescript",
+    "javascript"
+  ],
+  "contributes": {
+    "snippets": [
+      {
+        "language": "typescript",
+        "path": "./snippets/iterflow.json"
+      },
+      {
+        "language": "javascript",
+        "path": "./snippets/iterflow.json"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gv-sh/iterflow.git",
+    "directory": "packages/vscode-iterflow"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Gaurav Singh",
+    "email": "hi@gvsh.cc",
+    "url": "https://github.com/gv-sh"
+  }
+}
