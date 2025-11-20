@@ -94,11 +94,11 @@
 - [x] Statistical analysis workflow examples
 
 ### Comparison Documentation
-- [ ] Comparison with lodash methods
-- [ ] Comparison with Ramda functions
-- [ ] Comparison with ES2025 iterator helpers proposal
-- [ ] Migration guide from lodash to iterflow
-- [ ] Migration guide from Ramda to iterflow
+- [x] Comparison with lodash methods
+- [x] Comparison with Ramda functions
+- [x] Comparison with ES2025 iterator helpers proposal
+- [x] Migration guide from lodash to iterflow
+- [x] Migration guide from Ramda to iterflow
 
 ## Advanced Features
 
