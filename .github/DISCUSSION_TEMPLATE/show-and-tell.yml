@@ -1,0 +1,82 @@
+labels: ["show-and-tell"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎨 Show and Tell
+
+        Share your project, tutorial, or interesting use case with the community!
+
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: Give your project/post a catchy title
+      placeholder: "Building a Real-time Analytics Pipeline with iterflow"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What are you sharing?
+      options:
+        - Project or application
+        - Tutorial or guide
+        - Code snippet or pattern
+        - Blog post or article
+        - Video or presentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Tell us about what you've built or created
+      placeholder: I built a real-time analytics pipeline using iterflow that processes...
+    validations:
+      required: true
+
+  - type: textarea
+    id: highlights
+    attributes:
+      label: Key highlights
+      description: What makes this interesting or useful?
+      placeholder: |
+        - Processes 1M events per second
+        - Uses advanced window operations
+        - Integrates with multiple data sources
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code sample (optional)
+      description: Share a code snippet if applicable
+      render: typescript
+
+  - type: input
+    id: link
+    attributes:
+      label: Link (optional)
+      description: Link to your project, repo, blog post, etc.
+      placeholder: https://github.com/yourusername/your-project
+
+  - type: textarea
+    id: tech
+    attributes:
+      label: Technologies used
+      description: What technologies did you use alongside iterflow?
+      placeholder: |
+        - iterflow
+        - TypeScript
+        - Node.js
+        - Express
+
+  - type: textarea
+    id: learnings
+    attributes:
+      label: What you learned
+      description: Share any insights or lessons learned
