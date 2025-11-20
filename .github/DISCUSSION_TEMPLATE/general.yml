@@ -1,0 +1,59 @@
+labels: ["discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💬 General Discussion
+
+        Start a general discussion about iterflow, best practices, or the ecosystem.
+
+  - type: input
+    id: title
+    attributes:
+      label: Discussion title
+      description: Give your discussion a clear, descriptive title
+      placeholder: "Best practices for handling large datasets"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      description: What's the main focus of this discussion?
+      options:
+        - Best practices
+        - Performance
+        - Architecture & design
+        - Comparison with other libraries
+        - Use cases
+        - Community & ecosystem
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: content
+    attributes:
+      label: Discussion content
+      description: What would you like to discuss?
+      placeholder: I've been thinking about...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context or background
+      description: Provide any relevant context or background information
+
+  - type: textarea
+    id: questions
+    attributes:
+      label: Questions for the community
+      description: Specific questions you'd like answered
+      placeholder: |
+        - What approach do you recommend for...?
+        - Has anyone tried...?
+        - What are the trade-offs between...?

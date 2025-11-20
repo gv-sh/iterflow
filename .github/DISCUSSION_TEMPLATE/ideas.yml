@@ -1,0 +1,52 @@
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💡 Share Your Idea
+
+        Have an idea for improving iterflow? We'd love to hear about it! This is a space for brainstorming and discussing potential enhancements.
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: What's your idea?
+      description: Describe your idea in detail
+      placeholder: I think it would be great if iterflow could...
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why is this valuable?
+      description: What problem does this solve or what benefit does it provide?
+      placeholder: This would help with...
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples or mockups
+      description: Show how this might work (code examples, API design, etc.)
+      placeholder: |
+        ```typescript
+        // Example of how this might be used
+        iter([1, 2, 3])
+          .yourIdea()
+          .toArray();
+        ```
+      render: typescript
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Have you considered other approaches?
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else you'd like to add?

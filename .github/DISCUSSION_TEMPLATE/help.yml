@@ -1,0 +1,81 @@
+labels: ["help-wanted"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ❓ Get Help
+
+        Having trouble with iterflow? Ask the community for help!
+
+        **Note:** For bug reports, please use the [issue tracker](../issues/new/choose) instead.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: What do you need help with?
+      description: Describe what you're trying to accomplish or what's not working
+      placeholder: I'm trying to... but I'm getting...
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Your code
+      description: Share the code you're working with (minimal example preferred)
+      placeholder: |
+        ```typescript
+        import { iter } from 'iterflow';
+
+        const result = iter([1, 2, 3])
+          .map(x => x * 2)
+          .toArray();
+        ```
+      render: typescript
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: What result or behavior were you expecting?
+      placeholder: I expected...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened
+      description: What result or behavior did you observe?
+      placeholder: Instead, I got...
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you tried?
+      description: List things you've already attempted
+      placeholder: |
+        - Tried using filter instead of map
+        - Checked the documentation
+        - Searched for similar issues
+
+  - type: input
+    id: version
+    attributes:
+      label: iterflow version
+      description: Which version of iterflow are you using?
+      placeholder: "0.5.0"
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Your development environment (Node.js version, TypeScript version, etc.)
+      placeholder: |
+        - Node.js: 20.10.0
+        - TypeScript: 5.3.3
+        - OS: macOS 14.2
