@@ -226,3 +226,67 @@ export function validateIndex(
     );
   }
 }
+
+/**
+ * Validates that a number is a safe integer within JavaScript's safe integer range
+ * @param value - The value to validate
+ * @param paramName - The parameter name for error messages
+ * @param operation - The operation name for error context
+ */
+export function validateSafeInteger(
+  value: number,
+  paramName: string,
+  operation?: string
+): void {
+  if (!Number.isSafeInteger(value)) {
+    throw new ValidationError(
+      `${paramName} must be a safe integer (${Number.MIN_SAFE_INTEGER} to ${Number.MAX_SAFE_INTEGER}), got ${value}`,
+      operation,
+      { paramName, value }
+    );
+  }
+}
+
+/**
+ * Validates that a window/chunk size is within reasonable bounds
+ * @param size - The size to validate
+ * @param maxSize - The maximum allowed size (default: 1,000,000)
+ * @param operation - The operation name for error context
+ */
+export function validateWindowSize(
+  size: number,
+  maxSize: number = 1_000_000,
+  operation?: string
+): void {
+  validatePositiveInteger(size, 'size', operation);
+
+  if (size > maxSize) {
+    throw new ValidationError(
+      `Window size ${size} exceeds maximum allowed size ${maxSize}. Consider using smaller windows or streaming operations.`,
+      operation,
+      { size, maxSize }
+    );
+  }
+}
+
+/**
+ * Validates that an array size is within reasonable memory bounds
+ * @param size - The estimated size
+ * @param maxElements - The maximum allowed elements (default: 10,000,000)
+ * @param operation - The operation name for error context
+ */
+export function validateMemoryLimit(
+  size: number,
+  maxElements: number = 10_000_000,
+  operation?: string
+): void {
+  validateNonNegativeInteger(size, 'size', operation);
+
+  if (size > maxElements) {
+    throw new ValidationError(
+      `Operation would exceed memory limit (${size} elements > ${maxElements} maximum). Consider using streaming operations with take() or chunk().`,
+      operation,
+      { size, maxElements }
+    );
+  }
+}
