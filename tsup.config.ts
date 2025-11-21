@@ -11,5 +11,10 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   treeshake: true,
-  minify: false,
+  // Enable minification for production builds
+  // Set to true or 'terser' for release builds
+  minify: process.env.NODE_ENV === 'production' ? 'terser' : false,
+  minifyIdentifiers: process.env.NODE_ENV === 'production',
+  minifySyntax: process.env.NODE_ENV === 'production',
+  minifyWhitespace: process.env.NODE_ENV === 'production',
 });
