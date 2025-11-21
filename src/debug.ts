@@ -55,7 +55,7 @@ class DebugState {
     };
 
     if (this.config.logToConsole) {
-      console.log('[IterFlow Debug] Debug mode enabled', this.config);
+      console.log("[IterFlow Debug] Debug mode enabled", this.config);
     }
   }
 
@@ -67,7 +67,7 @@ class DebugState {
     this.config.traceOperations = false;
 
     if (this.config.logToConsole) {
-      console.log('[IterFlow Debug] Debug mode disabled');
+      console.log("[IterFlow Debug] Debug mode disabled");
     }
   }
 
@@ -119,7 +119,7 @@ class DebugState {
     this.traces = [];
 
     if (this.config.logToConsole) {
-      console.log('[IterFlow Debug] Traces cleared');
+      console.log("[IterFlow Debug] Traces cleared");
     }
   }
 
@@ -133,8 +133,14 @@ class DebugState {
   /**
    * Get summary statistics for traces
    */
-  getTraceSummary(): Record<string, { count: number; avgDuration: number; errors: number }> {
-    const summary: Record<string, { count: number; totalDuration: number; errors: number }> = {};
+  getTraceSummary(): Record<
+    string,
+    { count: number; avgDuration: number; errors: number }
+  > {
+    const summary: Record<
+      string,
+      { count: number; totalDuration: number; errors: number }
+    > = {};
 
     for (const trace of this.traces) {
       if (!summary[trace.operation]) {
@@ -153,7 +159,10 @@ class DebugState {
     }
 
     // Convert to final format with average duration
-    const result: Record<string, { count: number; avgDuration: number; errors: number }> = {};
+    const result: Record<
+      string,
+      { count: number; avgDuration: number; errors: number }
+    > = {};
 
     for (const [op, stats] of Object.entries(summary)) {
       result[op] = {
@@ -171,28 +180,29 @@ class DebugState {
    */
   private logTrace(entry: TraceEntry): void {
     const timestamp = new Date(entry.timestamp).toISOString();
-    const duration = entry.duration !== undefined ? `${entry.duration.toFixed(2)}ms` : 'N/A';
+    const duration =
+      entry.duration !== undefined ? `${entry.duration.toFixed(2)}ms` : "N/A";
 
     if (entry.error) {
       console.error(
         `[IterFlow Debug] ${timestamp} | ${entry.operation} | ERROR | ${duration}`,
-        entry.error
+        entry.error,
       );
     } else {
       console.log(
-        `[IterFlow Debug] ${timestamp} | ${entry.operation} | ${duration}`
+        `[IterFlow Debug] ${timestamp} | ${entry.operation} | ${duration}`,
       );
 
       if (this.config.traceInput && entry.input !== undefined) {
-        console.log('  Input:', entry.input);
+        console.log("  Input:", entry.input);
       }
 
       if (this.config.traceOutput && entry.output !== undefined) {
-        console.log('  Output:', entry.output);
+        console.log("  Output:", entry.output);
       }
 
       if (entry.metadata) {
-        console.log('  Metadata:', entry.metadata);
+        console.log("  Metadata:", entry.metadata);
       }
     }
   }
@@ -260,7 +270,10 @@ export function getTracesForOperation(operation: string): TraceEntry[] {
 /**
  * Get trace summary statistics
  */
-export function getTraceSummary(): Record<string, { count: number; avgDuration: number; errors: number }> {
+export function getTraceSummary(): Record<
+  string,
+  { count: number; avgDuration: number; errors: number }
+> {
   return debugState.getTraceSummary();
 }
 
@@ -270,7 +283,7 @@ export function getTraceSummary(): Record<string, { count: number; avgDuration: 
 export function traceOperation<T>(
   operation: string,
   fn: () => T,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ): T {
   if (!debugState.isEnabled()) {
     return fn();
@@ -313,7 +326,7 @@ export function traceOperation<T>(
 export async function traceOperationAsync<T>(
   operation: string,
   fn: () => Promise<T>,
-  metadata?: Record<string, unknown>
+  metadata?: Record<string, unknown>,
 ): Promise<T> {
   if (!debugState.isEnabled()) {
     return fn();

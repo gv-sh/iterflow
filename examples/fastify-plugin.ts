@@ -56,7 +56,7 @@ const analyticsPlugin: FastifyPluginCallback = (fastify, opts, done) => {
     url: '/analytics',
     handler: async (request: FastifyRequest, reply: FastifyReply) => {
       const recentRequests = iter(analyticsStore)
-        .takeLast(1000)
+        .toArray().slice(-1000)
         .toArray();
 
       const analytics = {
@@ -172,7 +172,7 @@ const paginationPlugin: FastifyPluginCallback = (
     const validPage = Math.max(1, page);
 
     const paginatedItems = iter(items)
-      .skip((validPage - 1) * validPageSize)
+      .drop((validPage - 1) * validPageSize)
       .take(validPageSize)
       .toArray();
 
@@ -211,10 +211,10 @@ const statisticsPlugin: FastifyPluginCallback = (fastify, opts, done) => {
       variance: iter(numbers).variance(),
       stdDev: iter(numbers).stdDev(),
       quartiles: {
-        q1: quartiles.q1,
-        q2: quartiles.q2,
-        q3: quartiles.q3,
-        iqr: quartiles.q3 - quartiles.q1
+        q1: quartiles.Q1,
+        q2: quartiles.Q2,
+        q3: quartiles.Q3,
+        iqr: quartiles.Q3 - quartiles.Q1
       }
     };
   });
@@ -306,7 +306,7 @@ const timeSeriesPlugin: FastifyPluginCallback = (fastify, opts, done) => {
     // Detect trends
     const values = sortedData.map(p => p.value);
     const firstHalf = iter(values).take(Math.floor(values.length / 2)).mean();
-    const secondHalf = iter(values).skip(Math.floor(values.length / 2)).mean();
+    const secondHalf = iter(values).drop(Math.floor(values.length / 2)).mean();
     const trend = secondHalf > firstHalf ? 'increasing' : secondHalf < firstHalf ? 'decreasing' : 'stable';
 
     return {

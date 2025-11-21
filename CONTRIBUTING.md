@@ -23,7 +23,7 @@ This project and everyone participating in it is governed by our [Code of Conduc
 Before you begin:
 - Check the [existing issues](https://github.com/gv-sh/iterflow/issues) to see if your bug or feature has already been reported
 - Read through our [README](README.md) to understand the project's goals and scope
-- Review our [ROADMAP](ROADMAP.md) to see planned features and improvements
+- Review our [ROADMAP](docs/project-management/ROADMAP.md) to see planned features and improvements
 - Join the discussions in [GitHub Discussions](https://github.com/gv-sh/iterflow/discussions) for questions and ideas
 
 ## Development Setup
@@ -327,7 +327,7 @@ const result = iter([1, null, 2, null, 3])
 
 Have an idea for a new feature?
 
-1. **Check roadmap:** Review [ROADMAP.md](ROADMAP.md) for planned features
+1. **Check roadmap:** Review [ROADMAP.md](docs/project-management/ROADMAP.md) for planned features
 2. **Use the template:** Fill out the [feature request template](.github/ISSUE_TEMPLATE/feature_request.md)
 3. **Explain the use case:**
    - What problem does this solve?

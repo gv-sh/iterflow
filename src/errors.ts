@@ -10,9 +10,13 @@ export class IterFlowError extends Error {
   public readonly operation?: string;
   public readonly context?: Record<string, unknown>;
 
-  constructor(message: string, operation?: string, context?: Record<string, unknown>) {
+  constructor(
+    message: string,
+    operation?: string,
+    context?: Record<string, unknown>,
+  ) {
     super(message);
-    this.name = 'IterFlowError';
+    this.name = "IterFlowError";
     this.operation = operation;
     this.context = context;
 
@@ -33,14 +37,14 @@ export class IterFlowError extends Error {
     }
 
     if (this.context && Object.keys(this.context).length > 0) {
-      msg += '\n  Context:';
+      msg += "\n  Context:";
       for (const [key, value] of Object.entries(this.context)) {
         msg += `\n    ${key}: ${JSON.stringify(value)}`;
       }
     }
 
     if (this.stack) {
-      msg += `\n  Stack: ${this.stack.split('\n').slice(1).join('\n')}`;
+      msg += `\n  Stack: ${this.stack.split("\n").slice(1).join("\n")}`;
     }
 
     return msg;
@@ -51,9 +55,13 @@ export class IterFlowError extends Error {
  * Error thrown when operation parameters are invalid
  */
 export class ValidationError extends IterFlowError {
-  constructor(message: string, operation?: string, context?: Record<string, unknown>) {
+  constructor(
+    message: string,
+    operation?: string,
+    context?: Record<string, unknown>,
+  ) {
     super(message, operation, context);
-    this.name = 'ValidationError';
+    this.name = "ValidationError";
   }
 }
 
@@ -63,9 +71,14 @@ export class ValidationError extends IterFlowError {
 export class OperationError extends IterFlowError {
   public readonly cause?: Error;
 
-  constructor(message: string, operation?: string, cause?: Error, context?: Record<string, unknown>) {
+  constructor(
+    message: string,
+    operation?: string,
+    cause?: Error,
+    context?: Record<string, unknown>,
+  ) {
     super(message, operation, context);
-    this.name = 'OperationError';
+    this.name = "OperationError";
     this.cause = cause;
   }
 
@@ -90,9 +103,9 @@ export class EmptySequenceError extends IterFlowError {
   constructor(operation: string, message?: string) {
     super(
       message || `Operation '${operation}' requires a non-empty sequence`,
-      operation
+      operation,
     );
-    this.name = 'EmptySequenceError';
+    this.name = "EmptySequenceError";
   }
 }
 
@@ -104,13 +117,12 @@ export class IndexOutOfBoundsError extends IterFlowError {
   public readonly size?: number;
 
   constructor(index: number, size?: number, operation?: string) {
-    const sizeInfo = size !== undefined ? ` (size: ${size})` : '';
-    super(
-      `Index ${index} is out of bounds${sizeInfo}`,
-      operation,
-      { index, size }
-    );
-    this.name = 'IndexOutOfBoundsError';
+    const sizeInfo = size !== undefined ? ` (size: ${size})` : "";
+    super(`Index ${index} is out of bounds${sizeInfo}`, operation, {
+      index,
+      size,
+    });
+    this.name = "IndexOutOfBoundsError";
     this.index = index;
     this.size = size;
   }
@@ -127,9 +139,9 @@ export class TypeConversionError extends IterFlowError {
     super(
       `Cannot convert value ${JSON.stringify(value)} to type ${expectedType}`,
       operation,
-      { value, expectedType }
+      { value, expectedType },
     );
-    this.name = 'TypeConversionError';
+    this.name = "TypeConversionError";
     this.value = value;
     this.expectedType = expectedType;
   }

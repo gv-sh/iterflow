@@ -3,12 +3,16 @@
  * @module recovery
  */
 
-import { OperationError } from './errors.js';
+import { OperationError } from "./errors.js";
 
 /**
  * Error handler function type
  */
-export type ErrorHandler<T, R = T> = (error: Error, element?: T, index?: number) => R;
+export type ErrorHandler<T, R = T> = (
+  error: Error,
+  element?: T,
+  index?: number,
+) => R;
 
 /**
  * Options for retry behavior
@@ -26,7 +30,7 @@ export interface RetryOptions {
 export function withErrorRecovery<T, R>(
   fn: (value: T, index?: number) => R,
   errorHandler: ErrorHandler<T, R>,
-  operation?: string
+  operation?: string,
 ): (value: T, index?: number) => R {
   return (value: T, index?: number): R => {
     try {
@@ -42,14 +46,9 @@ export function withErrorRecovery<T, R>(
  */
 export function withRetry<T extends any[], R>(
   fn: (...args: T) => R,
-  options: RetryOptions = {}
+  options: RetryOptions = {},
 ): (...args: T) => R {
-  const {
-    maxAttempts = 3,
-    delay = 0,
-    backoff = false,
-    onRetry,
-  } = options;
+  const { maxAttempts = 3, delay = 0, backoff = false, onRetry } = options;
 
   return (...args: T): R => {
     let lastError: Error;
@@ -83,8 +82,8 @@ export function withRetry<T extends any[], R>(
 
     throw new OperationError(
       `Operation failed after ${maxAttempts} attempts`,
-      'retry',
-      lastError!
+      "retry",
+      lastError!,
     );
   };
 }
@@ -94,14 +93,9 @@ export function withRetry<T extends any[], R>(
  */
 export function withRetryAsync<T extends any[], R>(
   fn: (...args: T) => Promise<R>,
-  options: RetryOptions = {}
+  options: RetryOptions = {},
 ): (...args: T) => Promise<R> {
-  const {
-    maxAttempts = 3,
-    delay = 0,
-    backoff = false,
-    onRetry,
-  } = options;
+  const { maxAttempts = 3, delay = 0, backoff = false, onRetry } = options;
 
   return async (...args: T): Promise<R> => {
     let lastError: Error;
@@ -131,8 +125,8 @@ export function withRetryAsync<T extends any[], R>(
 
     throw new OperationError(
       `Operation failed after ${maxAttempts} attempts`,
-      'retry',
-      lastError!
+      "retry",
+      lastError!,
     );
   };
 }
@@ -142,7 +136,7 @@ export function withRetryAsync<T extends any[], R>(
  */
 export function withDefault<T, R>(
   fn: (value: T) => R,
-  defaultValue: R
+  defaultValue: R,
 ): (value: T) => R {
   return (value: T): R => {
     try {
@@ -156,10 +150,7 @@ export function withDefault<T, R>(
 /**
  * Returns undefined if an error occurs (swallows errors)
  */
-export function tryOr<T, R>(
-  fn: (value: T) => R,
-  fallback: R
-): (value: T) => R {
+export function tryOr<T, R>(fn: (value: T) => R, fallback: R): (value: T) => R {
   return (value: T): R => {
     try {
       return fn(value);
@@ -174,7 +165,7 @@ export function tryOr<T, R>(
  */
 export function tryCatch<T, R>(
   fn: (value: T) => R,
-  value: T
+  value: T,
 ): [R | undefined, Error | undefined] {
   try {
     return [fn(value), undefined];
@@ -188,7 +179,7 @@ export function tryCatch<T, R>(
  */
 export async function tryCatchAsync<T, R>(
   fn: (value: T) => Promise<R>,
-  value: T
+  value: T,
 ): Promise<[R | undefined, Error | undefined]> {
   try {
     return [await fn(value), undefined];
@@ -207,9 +198,7 @@ export type Result<T, E = Error> =
 /**
  * Wraps a function to return a Result type
  */
-export function toResult<T, R>(
-  fn: (value: T) => R
-): (value: T) => Result<R> {
+export function toResult<T, R>(fn: (value: T) => R): (value: T) => Result<R> {
   return (value: T): Result<R> => {
     try {
       return { success: true, value: fn(value) };
@@ -223,7 +212,7 @@ export function toResult<T, R>(
  * Async version of toResult
  */
 export function toResultAsync<T, R>(
-  fn: (value: T) => Promise<R>
+  fn: (value: T) => Promise<R>,
 ): (value: T) => Promise<Result<R>> {
   return async (value: T): Promise<Result<R>> => {
     try {
@@ -239,7 +228,7 @@ export function toResultAsync<T, R>(
  */
 export function safePredicate<T>(
   predicate: (value: T, index?: number) => boolean,
-  defaultValue = false
+  defaultValue = false,
 ): (value: T, index?: number) => boolean {
   return (value: T, index?: number): boolean => {
     try {
@@ -255,7 +244,7 @@ export function safePredicate<T>(
  */
 export function safeComparator<T>(
   comparator: (a: T, b: T) => number,
-  defaultComparison = 0
+  defaultComparison = 0,
 ): (a: T, b: T) => number {
   return (a: T, b: T): number => {
     try {
@@ -275,7 +264,7 @@ export function errorBoundary<T extends any[], R>(
     onError?: (error: Error, args: T) => void;
     rethrow?: boolean;
     defaultValue?: R;
-  } = {}
+  } = {},
 ): (...args: T) => R | undefined {
   const { onError, rethrow = true, defaultValue } = options;
 

@@ -121,10 +121,10 @@ function useStatistics(numbers: number[]) {
       variance: iter(numbers).variance()
     },
     quartiles: {
-      q1: quartiles.q1,
-      q2: quartiles.q2,
-      q3: quartiles.q3,
-      iqr: quartiles.q3 - quartiles.q1
+      q1: quartiles.Q1,
+      q2: quartiles.Q2,
+      q3: quartiles.Q3,
+      iqr: quartiles.Q3 - quartiles.Q1
     }
   };
 }
@@ -140,7 +140,7 @@ function useVirtualList<T>(
   const endIndex = visibleStart + visibleCount + bufferSize;
 
   const visibleItems = iter(items)
-    .skip(startIndex)
+    .drop(startIndex)
     .take(endIndex - startIndex)
     .enumerate()
     .map(([index, item]) => ({

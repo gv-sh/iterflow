@@ -29,9 +29,9 @@ Powerful iterator utilities for ES2022+ with statistical operations, windowing, 
 - [Performance](#performance)
 - [Browser Support](#browser-support)
 
-## Why iterflow?
+## Why IterFlow?
 
-iterflow extends JavaScript's native iterators with powerful operations missing from the standard library:
+IterFlow extends JavaScript's native iterators with powerful operations missing from the standard library:
 
 - **Statistical operations** - Calculate mean, median, variance, percentiles directly on data streams
 - **Memory efficient** - Process large datasets or infinite sequences without loading everything into memory
@@ -39,7 +39,7 @@ iterflow extends JavaScript's native iterators with powerful operations missing 
 - **Composable** - Chain operations naturally with both wrapper and functional styles
 - **Future-proof** - Designed to complement ES2025 iterator helpers, not replace them
 
-Whether you're processing time-series data, analyzing datasets, or building data pipelines, iterflow provides the missing pieces for elegant, efficient JavaScript.
+Whether you're processing time-series data, analyzing datasets, or building data pipelines, IterFlow provides the missing pieces for elegant, efficient JavaScript.
 
 ## Features
 
@@ -374,14 +374,15 @@ const electronicsAverage = iter(sales)
   .map(sale => sale.amount)
   .mean();
 
-// Group by category and get top product in each
-const topByCategory = iter(sales)
+// Group by category and get total sales in each
+const salesByCategory = iter(sales)
   .groupBy(sale => sale.category)
   .entries()
   .map(([category, sales]) => ({
     category,
-    topProduct: iter(sales)
-      .max() // Will need custom comparison
+    total: iter(sales)
+      .map(sale => sale.amount)
+      .sum()
   }));
 ```
 
@@ -427,7 +428,7 @@ const increasingPeriods = iter(temperatures)
 
 ## TypeScript Support
 
-iterflow is built with TypeScript-first design and provides excellent type inference:
+IterFlow is built with TypeScript-first design and provides excellent type inference:
 
 ```typescript
 // Type is automatically inferred as IterFlow<string>
@@ -459,7 +460,7 @@ const adults = iter([
 
 ### Lazy Evaluation
 
-iterflow uses lazy evaluation, meaning operations are only computed when needed:
+IterFlow uses lazy evaluation, meaning operations are only computed when needed:
 
 ```typescript
 const expensiveOperation = iter(largeArray)
@@ -474,7 +475,7 @@ This makes it efficient for processing large datasets or infinite sequences.
 
 ### Performance Characteristics
 
-**When iterflow excels:**
+**When IterFlow excels:**
 - **Early termination**: Operations like `find()`, `some()`, `take()` benefit from lazy evaluation
 - **Large pipelines**: Multiple transformations on large datasets with minimal memory overhead
 - **Windowing operations**: Memory-efficient sliding windows and chunking
@@ -488,7 +489,7 @@ This makes it efficient for processing large datasets or infinite sequences.
 
 ### Benchmarks
 
-We maintain a comprehensive benchmark suite comparing iterflow against native array methods, lodash, and ramda:
+We maintain a comprehensive benchmark suite comparing IterFlow against native array methods, Lodash, and Ramda:
 
 ```bash
 # Run all benchmarks
@@ -503,15 +504,15 @@ npm run bench:lazy             # Lazy evaluation benefits
 npm run bench:memory           # Memory efficiency profiling
 ```
 
-For detailed benchmark results and methodology, see [BENCHMARKS.md](./BENCHMARKS.md).
+For detailed benchmark results and methodology, see [docs/testing/BENCHMARKS.md](./docs/testing/BENCHMARKS.md).
 
 Performance benchmarks run automatically in CI on every pull request and push to main.
 
 ## Browser Support
 
-iterflow requires ES2022+ features including iterators, generators, Map, and Set. For older browser support, use a transpiler like TypeScript or Babel.
+IterFlow requires ES2022+ features including iterators, generators, Map, and Set. For older browser support, use a transpiler like TypeScript or Babel.
 
-When ES2025 iterator helpers become available natively, iterflow will work alongside them seamlessly as it's designed to extend rather than replace the native functionality.
+When ES2025 iterator helpers become available natively, IterFlow will work alongside them seamlessly as it's designed to extend rather than replace the native functionality.
 
 ## Contributing
 
@@ -521,11 +522,12 @@ We welcome contributions! Please see our [contributing guidelines](CONTRIBUTING.
 - [Request features](https://github.com/gv-sh/iterflow/issues/new?template=feature_request.md)
 - [Submit pull requests](https://github.com/gv-sh/iterflow/pulls)
 
-## Support
+## Documentation & Support
 
-- [Documentation](./docs/api.md)
-- [Discussions](https://github.com/gv-sh/iterflow/discussions)
-- [Issues](https://github.com/gv-sh/iterflow/issues)
+- [API Reference](./docs/api.md)
+- [Getting Started Guide](./docs/guides/getting-started.md)
+- [GitHub Discussions](https://github.com/gv-sh/iterflow/discussions)
+- [Issue Tracker](https://github.com/gv-sh/iterflow/issues)
 
 ## License
 

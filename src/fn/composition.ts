@@ -42,9 +42,7 @@ export type TerminalOperation<T, R> = (iterable: Iterable<T>) => R;
  * process([1, 2, 3, 4, 5]); // [6, 8, 10]
  * ```
  */
-export function pipe<A, B>(
-  fn1: (input: A) => B,
-): (input: A) => B;
+export function pipe<A, B>(fn1: (input: A) => B): (input: A) => B;
 
 export function pipe<A, B, C>(
   fn1: (input: A) => B,
@@ -154,9 +152,7 @@ export function pipe(...fns: Array<(input: any) => any>): (input: any) => any {
  * process([1, 2, 3, 4, 5]); // [6, 8, 10]
  * ```
  */
-export function compose<A, B>(
-  fn1: (input: A) => B,
-): (input: A) => B;
+export function compose<A, B>(fn1: (input: A) => B): (input: A) => B;
 
 export function compose<A, B, C>(
   fn2: (input: B) => C,
@@ -300,8 +296,13 @@ export function createOperation<TInput, TOutput>(
 
 export function createOperation<TConfig, TInput, TOutput>(
   name: string,
-  generator: (iterable: Iterable<TInput>, config: TConfig) => Generator<TOutput>,
-): (config: TConfig) => (iterable: Iterable<TInput>) => IterableIterator<TOutput>;
+  generator: (
+    iterable: Iterable<TInput>,
+    config: TConfig,
+  ) => Generator<TOutput>,
+): (
+  config: TConfig,
+) => (iterable: Iterable<TInput>) => IterableIterator<TOutput>;
 
 export function createOperation<TConfig1, TConfig2, TInput, TOutput>(
   name: string,
@@ -331,14 +332,19 @@ export function createOperation<TConfig1, TConfig2, TConfig3, TInput, TOutput>(
 
 export function createOperation<TInput, TOutput>(
   name: string,
-  generator: (iterable: Iterable<TInput>, ...configs: any[]) => Generator<TOutput>,
-): (...configs: any[]) => (iterable: Iterable<TInput>) => IterableIterator<TOutput> {
+  generator: (
+    iterable: Iterable<TInput>,
+    ...configs: any[]
+  ) => Generator<TOutput>,
+): (
+  ...configs: any[]
+) => (iterable: Iterable<TInput>) => IterableIterator<TOutput> {
   // Handle operations with no configuration parameters
   if (generator.length === 1) {
     return (iterable: Iterable<TInput>): IterableIterator<TOutput> => {
       const result = generator(iterable);
       // Add operation name for debugging
-      Object.defineProperty(result, 'name', { value: name });
+      Object.defineProperty(result, "name", { value: name });
       return result;
     };
   }
@@ -348,7 +354,7 @@ export function createOperation<TInput, TOutput>(
     return (iterable: Iterable<TInput>): IterableIterator<TOutput> => {
       const result = generator(iterable, ...configs);
       // Add operation name for debugging
-      Object.defineProperty(result, 'name', { value: name });
+      Object.defineProperty(result, "name", { value: name });
       return result;
     };
   };
@@ -371,10 +377,7 @@ export type Transducer<TInput, TOutput> = <TResult>(
  * @template T The type of values being reduced
  * @template TResult The type of the accumulator
  */
-export type Reducer<T, TResult> = (
-  accumulator: TResult,
-  value: T,
-) => TResult;
+export type Reducer<T, TResult> = (accumulator: TResult, value: T) => TResult;
 
 /**
  * Creates a transducer from a map function.
@@ -534,17 +537,14 @@ export function composeTransducers(
   ...transducers: Array<Transducer<any, any>>
 ): Transducer<any, any> {
   return (reducer: Reducer<any, any>) => {
-    return transducers.reduceRight(
-      (acc, xf) => xf(acc),
-      reducer,
-    );
+    return transducers.reduceRight((acc, xf) => xf(acc), reducer);
   };
 }
 
 /**
  * Symbol used to mark a reduced value (for early termination in transducers).
  */
-const REDUCED = Symbol('@@transducer/reduced');
+const REDUCED = Symbol("@@transducer/reduced");
 
 /**
  * Interface for a reduced value (supports early termination).

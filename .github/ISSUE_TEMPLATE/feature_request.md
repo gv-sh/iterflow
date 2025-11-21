@@ -139,7 +139,7 @@ Add any other context, links, research, or examples:
 
 Before submitting, please ensure:
 
-- [ ] I have checked the [ROADMAP](../../ROADMAP.md) to see if this is already planned
+- [ ] I have checked the [ROADMAP](../../docs/project-management/ROADMAP.md) to see if this is already planned
 - [ ] I have searched existing issues to ensure this isn't a duplicate
 - [ ] This feature aligns with iterflow's goal of extending native iterator functionality
 - [ ] I have described the problem and use case clearly

@@ -135,7 +135,7 @@ export namespace iter {
 
     return new IterFlow({
       *[Symbol.iterator]() {
-        validateNonZero(step, 'step', 'range');
+        validateNonZero(step, "step", "range");
 
         if (step > 0) {
           for (let i = actualStart; i < actualStop; i += step) {
@@ -237,9 +237,7 @@ export namespace iter {
    * // [1, 2, 3, 5, 6, 7, 9, 10, 11]
    * ```
    */
-  export function merge<T>(
-    ...iterables: Iterable<T>[]
-  ): IterFlow<T>;
+  export function merge<T>(...iterables: Iterable<T>[]): IterFlow<T>;
   export function merge<T>(
     compareFn: (a: T, b: T) => number,
     ...iterables: Iterable<T>[]

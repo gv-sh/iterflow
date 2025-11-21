@@ -41,7 +41,8 @@ export interface DeprecationWarning {
  * Global deprecation configuration
  */
 let config: DeprecationConfig = {
-  enabled: typeof process !== 'undefined' && process.env.NODE_ENV !== 'production',
+  enabled:
+    typeof process !== "undefined" && process.env.NODE_ENV !== "production",
   showStackTrace: false,
 };
 
@@ -70,7 +71,9 @@ const warnedFeatures = new Set<string>();
  * });
  * ```
  */
-export function configureDeprecation(options: Partial<DeprecationConfig>): void {
+export function configureDeprecation(
+  options: Partial<DeprecationConfig>,
+): void {
   config = { ...config, ...options };
 }
 
@@ -124,11 +127,11 @@ function emitWarning(warning: DeprecationWarning): void {
   }
 
   // Emit the warning
-  if (typeof process !== 'undefined' && process.emitWarning) {
+  if (typeof process !== "undefined" && process.emitWarning) {
     // Node.js environment
     const options: any = {
-      type: 'DeprecationWarning',
-      code: 'ITERFLOW_DEPRECATION',
+      type: "DeprecationWarning",
+      code: "ITERFLOW_DEPRECATION",
       detail: warning.message,
     };
 
@@ -140,7 +143,7 @@ function emitWarning(warning: DeprecationWarning): void {
 
   // Show stack trace if enabled
   if (config.showStackTrace && warning.stack) {
-    console.warn('Stack trace:', warning.stack);
+    console.warn("Stack trace:", warning.stack);
   }
 }
 
@@ -164,7 +167,7 @@ function emitWarning(warning: DeprecationWarning): void {
  * }
  * ```
  */
-export function deprecate(options: Omit<DeprecationWarning, 'stack'>): void {
+export function deprecate(options: Omit<DeprecationWarning, "stack">): void {
   const warning: DeprecationWarning = {
     ...options,
     stack: config.showStackTrace ? new Error().stack : undefined,
@@ -192,17 +195,19 @@ export function deprecate(options: Omit<DeprecationWarning, 'stack'>): void {
  * }
  * ```
  */
-export function deprecated(options: Omit<DeprecationWarning, 'stack' | 'feature'>) {
+export function deprecated(
+  options: Omit<DeprecationWarning, "stack" | "feature">,
+) {
   return function <T extends Function>(
     target: any,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<T>
+    descriptor: TypedPropertyDescriptor<T>,
   ): TypedPropertyDescriptor<T> | void {
     const originalMethod = descriptor.value;
 
     if (!originalMethod) return;
 
-    const className = target.constructor?.name || 'Object';
+    const className = target.constructor?.name || "Object";
     const feature = `${className}.${propertyKey}`;
 
     descriptor.value = function (this: any, ...args: any[]) {
@@ -234,7 +239,7 @@ export function deprecated(options: Omit<DeprecationWarning, 'stack' | 'feature'
  */
 export function deprecatedFunction<T extends (...args: any[]) => any>(
   fn: T,
-  options: Omit<DeprecationWarning, 'stack'>
+  options: Omit<DeprecationWarning, "stack">,
 ): T {
   return function (this: any, ...args: any[]) {
     deprecate(options);
