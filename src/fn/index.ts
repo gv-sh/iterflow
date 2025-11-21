@@ -1,7 +1,11 @@
 // Functional API exports - for functional programming style usage
 // Usage: import { sum, filter, map } from 'iterflow/fn';
 
-import { validateRange, validatePositiveInteger, validateNonZero } from '../validation.js';
+import {
+  validateRange,
+  validatePositiveInteger,
+  validateNonZero,
+} from "../validation.js";
 
 // Statistical operations
 /**
@@ -196,7 +200,7 @@ export function percentile(
   iterable: Iterable<number>,
   p: number,
 ): number | undefined {
-  validateRange(p, 0, 100, 'percentile', 'percentile');
+  validateRange(p, 0, 100, "percentile", "percentile");
 
   const values = Array.from(iterable);
   if (values.length === 0) return undefined;
@@ -268,7 +272,7 @@ export function mode(iterable: Iterable<number>): number[] | undefined {
  * ```
  */
 export function quartiles(
-  iterable: Iterable<number>
+  iterable: Iterable<number>,
 ): { Q1: number; Q2: number; Q3: number } | undefined {
   const values = Array.from(iterable);
   if (values.length === 0) return undefined;
@@ -352,8 +356,8 @@ export function product(iterable: Iterable<number>): number {
  * Calculates the covariance between two numeric sequences.
  * Covariance measures the joint variability of two random variables.
  *
- * @param iterable1 - The first iterable of numbers
- * @param iterable2 - The second iterable of numbers
+ * @param iter1 - The first iterable of numbers
+ * @param iter2 - The second iterable of numbers
  * @returns The covariance, or undefined if either sequence is empty or sequences have different lengths
  * @example
  * ```typescript
@@ -362,11 +366,11 @@ export function product(iterable: Iterable<number>): number {
  * ```
  */
 export function covariance(
-  iterable1: Iterable<number>,
-  iterable2: Iterable<number>
+  iter1: Iterable<number>,
+  iter2: Iterable<number>,
 ): number | undefined {
-  const values1 = Array.from(iterable1);
-  const values2 = Array.from(iterable2);
+  const values1 = Array.from(iter1);
+  const values2 = Array.from(iter2);
 
   if (
     values1.length === 0 ||
@@ -392,8 +396,8 @@ export function covariance(
  * Correlation measures the strength and direction of the linear relationship between two variables.
  * Values range from -1 (perfect negative correlation) to 1 (perfect positive correlation).
  *
- * @param iterable1 - The first iterable of numbers
- * @param iterable2 - The second iterable of numbers
+ * @param iter1 - The first iterable of numbers
+ * @param iter2 - The second iterable of numbers
  * @returns The correlation coefficient, or undefined if either sequence is empty or sequences have different lengths
  * @example
  * ```typescript
@@ -403,11 +407,11 @@ export function covariance(
  * ```
  */
 export function correlation(
-  iterable1: Iterable<number>,
-  iterable2: Iterable<number>
+  iter1: Iterable<number>,
+  iter2: Iterable<number>,
 ): number | undefined {
-  const values1 = Array.from(iterable1);
-  const values2 = Array.from(iterable2);
+  const values1 = Array.from(iter1);
+  const values2 = Array.from(iter2);
 
   if (
     values1.length === 0 ||
@@ -583,7 +587,9 @@ export function flatMap<T, U>(
  * // [1, 2, 3, 4, 5, 6]
  * ```
  */
-export function concat<T>(): (...iterables: Iterable<T>[]) => IterableIterator<T> {
+export function concat<T>(): (
+  ...iterables: Iterable<T>[]
+) => IterableIterator<T> {
   return function* (...iterables: Iterable<T>[]): IterableIterator<T> {
     for (const iterable of iterables) {
       yield* iterable;
@@ -663,7 +669,9 @@ export function scan<T, U>(
  * // [[0, 'a'], [1, 'b'], [2, 'c']]
  * ```
  */
-export function enumerate<T>(): (iterable: Iterable<T>) => IterableIterator<[number, T]> {
+export function enumerate<T>(): (
+  iterable: Iterable<T>,
+) => IterableIterator<[number, T]> {
   return function* (iterable: Iterable<T>): IterableIterator<[number, T]> {
     let index = 0;
     for (const value of iterable) {
@@ -718,7 +726,7 @@ export function sort(
   return (function* (): IterableIterator<number | string> {
     const buffer = Array.from(iterable);
     buffer.sort((a, b) => {
-      if (typeof a === 'number' && typeof b === 'number') {
+      if (typeof a === "number" && typeof b === "number") {
         return a - b;
       }
       return String(a).localeCompare(String(b));
@@ -774,7 +782,7 @@ export function sortBy<T>(
 export function window<T>(
   size: number,
 ): (iterable: Iterable<T>) => IterableIterator<T[]> {
-  validatePositiveInteger(size, 'size', 'window');
+  validatePositiveInteger(size, "size", "window");
 
   return function* (iterable: Iterable<T>): IterableIterator<T[]> {
     // Use circular buffer to avoid O(n) shift() operations
@@ -817,7 +825,7 @@ export function window<T>(
 export function chunk<T>(
   size: number,
 ): (iterable: Iterable<T>) => IterableIterator<T[]> {
-  validatePositiveInteger(size, 'size', 'chunk');
+  validatePositiveInteger(size, "size", "chunk");
 
   return function* (iterable: Iterable<T>): IterableIterator<T[]> {
     // Preallocate buffer to avoid dynamic resizing
@@ -1261,7 +1269,10 @@ export function first<T>(
  * last([], 0); // 0
  * ```
  */
-export function last<T>(iterable: Iterable<T>, defaultValue?: T): T | undefined {
+export function last<T>(
+  iterable: Iterable<T>,
+  defaultValue?: T,
+): T | undefined {
   let lastValue: T | undefined = defaultValue;
   let hasValue = false;
   for (const value of iterable) {
@@ -1286,7 +1297,9 @@ export function last<T>(iterable: Iterable<T>, defaultValue?: T): T | undefined 
  * nth(-1)([1, 2, 3]); // undefined
  * ```
  */
-export function nth<T>(index: number): (iterable: Iterable<T>) => T | undefined {
+export function nth<T>(
+  index: number,
+): (iterable: Iterable<T>) => T | undefined {
   return function (iterable: Iterable<T>): T | undefined {
     if (index < 0) {
       return undefined;
@@ -1466,7 +1479,7 @@ export function range(
   const actualStop = stop === undefined ? startOrStop : stop;
 
   return (function* (): IterableIterator<number> {
-    validateNonZero(step, 'step', 'range');
+    validateNonZero(step, "step", "range");
 
     if (step > 0) {
       for (let i = actualStart; i < actualStop; i += step) {

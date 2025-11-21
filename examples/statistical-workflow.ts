@@ -105,10 +105,10 @@ const studyHours = iter(studentData).map(s => s.studyHours).toArray();
 const attendanceRates = iter(studentData).map(s => s.attendance).toArray();
 
 const correlations = {
-  studyVsMath: iter.zip(studyHours, mathScores).correlation(),
-  attendanceVsMath: iter.zip(attendanceRates, mathScores).correlation(),
-  mathVsScience: iter.zip(mathScores, iter(studentData).map(s => s.science).toArray()).correlation(),
-  mathVsEnglish: iter.zip(mathScores, iter(studentData).map(s => s.english).toArray()).correlation()
+  studyVsMath: iter(studyHours).correlation(mathScores),
+  attendanceVsMath: iter(attendanceRates).correlation(mathScores),
+  mathVsScience: iter(mathScores).correlation(iter(studentData).map(s => s.science).toArray()),
+  mathVsEnglish: iter(mathScores).correlation(iter(studentData).map(s => s.english).toArray())
 };
 
 console.log('=== Correlation Analysis ===\n');

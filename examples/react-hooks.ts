@@ -39,7 +39,7 @@ function useFilteredUsers(users: User[], minAge: number) {
 // Example: Paginated data processing with React
 function usePaginatedData<T>(items: T[], page: number, pageSize: number) {
   const paginatedItems = iter(items)
-    .skip(page * pageSize)
+    .drop(page * pageSize)
     .take(pageSize)
     .toArray();
 
@@ -83,7 +83,7 @@ function useInfiniteScrollData<T>(
     .toArray();
 
   const nextBatch = iter(allItems)
-    .skip(loadedCount)
+    .drop(loadedCount)
     .take(batchSize)
     .toArray();
 

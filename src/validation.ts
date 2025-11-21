@@ -3,7 +3,7 @@
  * @module validation
  */
 
-import { ValidationError, TypeConversionError } from './errors.js';
+import { ValidationError, TypeConversionError } from "./errors.js";
 
 /**
  * Validates that a value is a positive integer
@@ -11,13 +11,13 @@ import { ValidationError, TypeConversionError } from './errors.js';
 export function validatePositiveInteger(
   value: number,
   paramName: string,
-  operation?: string
+  operation?: string,
 ): void {
   if (!Number.isInteger(value)) {
     throw new ValidationError(
       `${paramName} must be an integer, got ${value}`,
       operation,
-      { paramName, value }
+      { paramName, value },
     );
   }
 
@@ -25,7 +25,7 @@ export function validatePositiveInteger(
     throw new ValidationError(
       `${paramName} must be at least 1, got ${value}`,
       operation,
-      { paramName, value }
+      { paramName, value },
     );
   }
 }
@@ -36,13 +36,13 @@ export function validatePositiveInteger(
 export function validateNonNegativeInteger(
   value: number,
   paramName: string,
-  operation?: string
+  operation?: string,
 ): void {
   if (!Number.isInteger(value)) {
     throw new ValidationError(
       `${paramName} must be an integer, got ${value}`,
       operation,
-      { paramName, value }
+      { paramName, value },
     );
   }
 
@@ -50,7 +50,7 @@ export function validateNonNegativeInteger(
     throw new ValidationError(
       `${paramName} must be non-negative, got ${value}`,
       operation,
-      { paramName, value }
+      { paramName, value },
     );
   }
 }
@@ -63,13 +63,13 @@ export function validateRange(
   min: number,
   max: number,
   paramName: string,
-  operation?: string
+  operation?: string,
 ): void {
   if (value < min || value > max) {
     throw new ValidationError(
       `${paramName} must be between ${min} and ${max}, got ${value}`,
       operation,
-      { paramName, value, min, max }
+      { paramName, value, min, max },
     );
   }
 }
@@ -80,13 +80,13 @@ export function validateRange(
 export function validateFiniteNumber(
   value: number,
   paramName: string,
-  operation?: string
+  operation?: string,
 ): void {
   if (!Number.isFinite(value)) {
     throw new ValidationError(
       `${paramName} must be a finite number, got ${value}`,
       operation,
-      { paramName, value }
+      { paramName, value },
     );
   }
 }
@@ -97,14 +97,13 @@ export function validateFiniteNumber(
 export function validateNonZero(
   value: number,
   paramName: string,
-  operation?: string
+  operation?: string,
 ): void {
   if (value === 0) {
-    throw new ValidationError(
-      `${paramName} cannot be zero`,
-      operation,
-      { paramName, value }
-    );
+    throw new ValidationError(`${paramName} cannot be zero`, operation, {
+      paramName,
+      value,
+    });
   }
 }
 
@@ -114,13 +113,13 @@ export function validateNonZero(
 export function validateFunction(
   value: unknown,
   paramName: string,
-  operation?: string
+  operation?: string,
 ): asserts value is Function {
-  if (typeof value !== 'function') {
+  if (typeof value !== "function") {
     throw new ValidationError(
       `${paramName} must be a function, got ${typeof value}`,
       operation,
-      { paramName, type: typeof value }
+      { paramName, type: typeof value },
     );
   }
 }
@@ -131,17 +130,13 @@ export function validateFunction(
 export function validateIterable<T>(
   value: unknown,
   paramName: string,
-  operation?: string
+  operation?: string,
 ): asserts value is Iterable<T> {
-  if (
-    value == null ||
-    typeof (value as any)[Symbol.iterator] !== 'function'
-  ) {
-    throw new ValidationError(
-      `${paramName} must be iterable`,
-      operation,
-      { paramName, type: typeof value }
-    );
+  if (value == null || typeof (value as any)[Symbol.iterator] !== "function") {
+    throw new ValidationError(`${paramName} must be iterable`, operation, {
+      paramName,
+      type: typeof value,
+    });
   }
 }
 
@@ -150,9 +145,9 @@ export function validateIterable<T>(
  */
 export function validateComparator<T>(
   fn: unknown,
-  operation?: string
+  operation?: string,
 ): asserts fn is (a: T, b: T) => number {
-  validateFunction(fn, 'comparator', operation);
+  validateFunction(fn, "comparator", operation);
 
   // Optional: Test with sample values if needed
   // This is a basic check - actual validation happens at runtime
@@ -161,15 +156,9 @@ export function validateComparator<T>(
 /**
  * Validates that an array is not empty
  */
-export function validateNonEmpty<T>(
-  arr: T[],
-  operation?: string
-): void {
+export function validateNonEmpty<T>(arr: T[], operation?: string): void {
   if (arr.length === 0) {
-    throw new ValidationError(
-      'Sequence cannot be empty',
-      operation
-    );
+    throw new ValidationError("Sequence cannot be empty", operation);
   }
 }
 
@@ -179,12 +168,12 @@ export function validateNonEmpty<T>(
 export function toNumber(
   value: unknown,
   paramName: string,
-  operation?: string
+  operation?: string,
 ): number {
   const num = Number(value);
 
   if (Number.isNaN(num)) {
-    throw new TypeConversionError(value, 'number', operation);
+    throw new TypeConversionError(value, "number", operation);
   }
 
   return num;
@@ -196,13 +185,13 @@ export function toNumber(
 export function toInteger(
   value: unknown,
   paramName: string,
-  operation?: string
+  operation?: string,
 ): number {
   const num = toNumber(value, paramName, operation);
   const int = Math.trunc(num);
 
   if (num !== int) {
-    throw new TypeConversionError(value, 'integer', operation);
+    throw new TypeConversionError(value, "integer", operation);
   }
 
   return int;
@@ -214,15 +203,15 @@ export function toInteger(
 export function validateIndex(
   index: number,
   size: number,
-  operation?: string
+  operation?: string,
 ): void {
-  validateNonNegativeInteger(index, 'index', operation);
+  validateNonNegativeInteger(index, "index", operation);
 
   if (index >= size) {
     throw new ValidationError(
       `Index ${index} is out of bounds for size ${size}`,
       operation,
-      { index, size }
+      { index, size },
     );
   }
 }
@@ -236,13 +225,13 @@ export function validateIndex(
 export function validateSafeInteger(
   value: number,
   paramName: string,
-  operation?: string
+  operation?: string,
 ): void {
   if (!Number.isSafeInteger(value)) {
     throw new ValidationError(
       `${paramName} must be a safe integer (${Number.MIN_SAFE_INTEGER} to ${Number.MAX_SAFE_INTEGER}), got ${value}`,
       operation,
-      { paramName, value }
+      { paramName, value },
     );
   }
 }
@@ -256,15 +245,15 @@ export function validateSafeInteger(
 export function validateWindowSize(
   size: number,
   maxSize: number = 1_000_000,
-  operation?: string
+  operation?: string,
 ): void {
-  validatePositiveInteger(size, 'size', operation);
+  validatePositiveInteger(size, "size", operation);
 
   if (size > maxSize) {
     throw new ValidationError(
       `Window size ${size} exceeds maximum allowed size ${maxSize}. Consider using smaller windows or streaming operations.`,
       operation,
-      { size, maxSize }
+      { size, maxSize },
     );
   }
 }
@@ -278,15 +267,15 @@ export function validateWindowSize(
 export function validateMemoryLimit(
   size: number,
   maxElements: number = 10_000_000,
-  operation?: string
+  operation?: string,
 ): void {
-  validateNonNegativeInteger(size, 'size', operation);
+  validateNonNegativeInteger(size, "size", operation);
 
   if (size > maxElements) {
     throw new ValidationError(
       `Operation would exceed memory limit (${size} elements > ${maxElements} maximum). Consider using streaming operations with take() or chunk().`,
       operation,
-      { size, maxElements }
+      { size, maxElements },
     );
   }
 }

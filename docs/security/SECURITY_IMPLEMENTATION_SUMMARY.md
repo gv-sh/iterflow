@@ -549,7 +549,7 @@ The iterflow library is now **production-ready from a security perspective** wit
 ### Security Documentation
 
 - [SECURITY.md](./SECURITY.md) - Security policy and best practices
-- [SECURITY_AUDIT.md](./SECURITY_AUDIT.md) - Comprehensive security audit
+- [SECURITY_AUDIT.md](../security/SECURITY_AUDIT.md) - Comprehensive security audit
 - [Memory Safety Guide](./docs/guides/memory-safety.md) - Memory management
 - [DoS Protection Guide](./docs/guides/dos-protection.md) - DoS prevention
 

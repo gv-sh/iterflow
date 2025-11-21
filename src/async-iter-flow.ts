@@ -26,9 +26,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    */
   constructor(source: AsyncIterable<T> | AsyncIterator<T>) {
     this.source =
-      Symbol.asyncIterator in source
-        ? source[Symbol.asyncIterator]()
-        : source;
+      Symbol.asyncIterator in source ? source[Symbol.asyncIterator]() : source;
   }
 
   // Async Iterator protocol
@@ -85,7 +83,9 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * await asyncIter([1, 2, 3, 4]).filter(async x => x % 2 === 0).toArray(); // [2, 4]
    * ```
    */
-  filter(predicate: (value: T) => boolean | Promise<boolean>): AsyncIterflow<T> {
+  filter(
+    predicate: (value: T) => boolean | Promise<boolean>,
+  ): AsyncIterflow<T> {
     const self = this;
     return new AsyncIterflow({
       async *[Symbol.asyncIterator]() {
@@ -160,7 +160,12 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * ```
    */
   flatMap<U>(
-    fn: (value: T) => AsyncIterable<U> | Iterable<U> | Promise<AsyncIterable<U> | Iterable<U>>
+    fn: (
+      value: T,
+    ) =>
+      | AsyncIterable<U>
+      | Iterable<U>
+      | Promise<AsyncIterable<U> | Iterable<U>>,
   ): AsyncIterflow<U> {
     const self = this;
     return new AsyncIterflow({
@@ -188,7 +193,9 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * // [1, 2, 3, 4, 5, 6]
    * ```
    */
-  concat(...iterables: Array<AsyncIterable<T> | Iterable<T>>): AsyncIterflow<T> {
+  concat(
+    ...iterables: Array<AsyncIterable<T> | Iterable<T>>
+  ): AsyncIterflow<T> {
     const self = this;
     return new AsyncIterflow({
       async *[Symbol.asyncIterator]() {
@@ -244,7 +251,10 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * // [0, 1, 3, 6, 10]
    * ```
    */
-  scan<U>(fn: (accumulator: U, value: T) => U | Promise<U>, initial: U): AsyncIterflow<U> {
+  scan<U>(
+    fn: (accumulator: U, value: T) => U | Promise<U>,
+    initial: U,
+  ): AsyncIterflow<U> {
     const self = this;
     return new AsyncIterflow({
       async *[Symbol.asyncIterator]() {
@@ -322,7 +332,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
       async *[Symbol.asyncIterator]() {
         const buffer = await self.toArray();
         buffer.sort((a, b) => {
-          if (typeof a === 'number' && typeof b === 'number') {
+          if (typeof a === "number" && typeof b === "number") {
             return a - b;
           }
           return String(a).localeCompare(String(b));
@@ -573,10 +583,11 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * await asyncIter([1, 2, 3, 4, 5]).percentile(50); // 3
    * ```
    */
-  async percentile(this: AsyncIterflow<number>, p: number): Promise<number | undefined> {
-    if (p < 0 || p > 100) {
-      throw new Error("Percentile must be between 0 and 100");
-    }
+  async percentile(
+    this: AsyncIterflow<number>,
+    p: number,
+  ): Promise<number | undefined> {
+    validateRange(p, 0, 100, "percentile", "percentile");
 
     const values = await this.toArray();
     if (values.length === 0) return undefined;
@@ -645,7 +656,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * ```
    */
   async quartiles(
-    this: AsyncIterflow<number>
+    this: AsyncIterflow<number>,
   ): Promise<{ Q1: number; Q2: number; Q3: number } | undefined> {
     const values = await this.toArray();
     if (values.length === 0) return undefined;
@@ -737,7 +748,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    */
   async covariance(
     this: AsyncIterflow<number>,
-    other: AsyncIterable<number> | Iterable<number>
+    other: AsyncIterable<number> | Iterable<number>,
   ): Promise<number | undefined> {
     const values1 = await this.toArray();
     const values2: number[] = [];
@@ -760,10 +771,8 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
       return undefined;
     }
 
-    const mean1 =
-      values1.reduce((sum, val) => sum + val, 0) / values1.length;
-    const mean2 =
-      values2.reduce((sum, val) => sum + val, 0) / values2.length;
+    const mean1 = values1.reduce((sum, val) => sum + val, 0) / values1.length;
+    const mean2 = values2.reduce((sum, val) => sum + val, 0) / values2.length;
 
     let covariance = 0;
     for (let i = 0; i < values1.length; i++) {
@@ -787,7 +796,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    */
   async correlation(
     this: AsyncIterflow<number>,
-    other: AsyncIterable<number> | Iterable<number>
+    other: AsyncIterable<number> | Iterable<number>,
   ): Promise<number | undefined> {
     const values1 = await this.toArray();
     const values2: number[] = [];
@@ -810,10 +819,8 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
       return undefined;
     }
 
-    const mean1 =
-      values1.reduce((sum, val) => sum + val, 0) / values1.length;
-    const mean2 =
-      values2.reduce((sum, val) => sum + val, 0) / values2.length;
+    const mean1 = values1.reduce((sum, val) => sum + val, 0) / values1.length;
+    const mean2 = values2.reduce((sum, val) => sum + val, 0) / values2.length;
 
     let covariance = 0;
     let variance1 = 0;
@@ -851,9 +858,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * ```
    */
   window(size: number): AsyncIterflow<T[]> {
-    if (size < 1) {
-      throw new Error("Window size must be at least 1");
-    }
+    validatePositiveInteger(size, "size", "window");
 
     const self = this;
     return new AsyncIterflow({
@@ -894,9 +899,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * ```
    */
   chunk(size: number): AsyncIterflow<T[]> {
-    if (size < 1) {
-      throw new Error("Chunk size must be at least 1");
-    }
+    validatePositiveInteger(size, "size", "chunk");
 
     const self = this;
     return new AsyncIterflow({
@@ -1031,7 +1034,9 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * // [1, 2, 3]
    * ```
    */
-  takeWhile(predicate: (value: T) => boolean | Promise<boolean>): AsyncIterflow<T> {
+  takeWhile(
+    predicate: (value: T) => boolean | Promise<boolean>,
+  ): AsyncIterflow<T> {
     const self = this;
     return new AsyncIterflow({
       async *[Symbol.asyncIterator]() {
@@ -1054,7 +1059,9 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * // [3, 4, 1, 2]
    * ```
    */
-  dropWhile(predicate: (value: T) => boolean | Promise<boolean>): AsyncIterflow<T> {
+  dropWhile(
+    predicate: (value: T) => boolean | Promise<boolean>,
+  ): AsyncIterflow<T> {
     const self = this;
     return new AsyncIterflow({
       async *[Symbol.asyncIterator]() {
@@ -1084,7 +1091,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * ```
    */
   async partition(
-    predicate: (value: T) => boolean | Promise<boolean>
+    predicate: (value: T) => boolean | Promise<boolean>,
   ): Promise<[T[], T[]]> {
     const truthy: T[] = [];
     const falsy: T[] = [];
@@ -1144,7 +1151,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    */
   async reduce<U>(
     fn: (accumulator: U, value: T) => U | Promise<U>,
-    initial: U
+    initial: U,
   ): Promise<U> {
     let accumulator = initial;
     for await (const value of this) {
@@ -1165,7 +1172,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * ```
    */
   async find(
-    predicate: (value: T) => boolean | Promise<boolean>
+    predicate: (value: T) => boolean | Promise<boolean>,
   ): Promise<T | undefined> {
     for await (const value of this) {
       if (await predicate(value)) {
@@ -1187,7 +1194,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * ```
    */
   async findIndex(
-    predicate: (value: T) => boolean | Promise<boolean>
+    predicate: (value: T) => boolean | Promise<boolean>,
   ): Promise<number> {
     let index = 0;
     for await (const value of this) {
@@ -1210,7 +1217,9 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * await asyncIter([1, 2, 3, 4, 5]).some(async x => x > 3); // true
    * ```
    */
-  async some(predicate: (value: T) => boolean | Promise<boolean>): Promise<boolean> {
+  async some(
+    predicate: (value: T) => boolean | Promise<boolean>,
+  ): Promise<boolean> {
     for await (const value of this) {
       if (await predicate(value)) {
         return true;
@@ -1230,7 +1239,9 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * await asyncIter([2, 4, 6]).every(async x => x % 2 === 0); // true
    * ```
    */
-  async every(predicate: (value: T) => boolean | Promise<boolean>): Promise<boolean> {
+  async every(
+    predicate: (value: T) => boolean | Promise<boolean>,
+  ): Promise<boolean> {
     for await (const value of this) {
       if (!(await predicate(value))) {
         return false;
@@ -1357,7 +1368,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    */
   mapParallel<U>(
     fn: (value: T) => Promise<U>,
-    concurrency = 10
+    concurrency = 10,
   ): AsyncIterflow<U> {
     const self = this;
     return new AsyncIterflow({
@@ -1381,9 +1392,9 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
             results.set(completed.index, completed.value);
             promises.splice(
               promises.findIndex((p) =>
-                p.then((r) => r.index === completed.index)
+                p.then((r) => r.index === completed.index),
               ),
-              1
+              1,
             );
 
             while (results.has(completedIndex)) {
@@ -1399,8 +1410,10 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
           const completed = await Promise.race(promises);
           results.set(completed.index, completed.value);
           promises.splice(
-            promises.findIndex((p) => p.then((r) => r.index === completed.index)),
-            1
+            promises.findIndex((p) =>
+              p.then((r) => r.index === completed.index),
+            ),
+            1,
           );
 
           while (results.has(completedIndex)) {
@@ -1431,7 +1444,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    */
   filterParallel(
     predicate: (value: T) => Promise<boolean>,
-    concurrency = 10
+    concurrency = 10,
   ): AsyncIterflow<T> {
     const self = this;
     return new AsyncIterflow({
@@ -1461,9 +1474,9 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
             });
             promises.splice(
               promises.findIndex((p) =>
-                p.then((r) => r.index === completed.index)
+                p.then((r) => r.index === completed.index),
               ),
-              1
+              1,
             );
 
             while (results.has(completedIndex)) {
@@ -1485,8 +1498,10 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
             keep: completed.keep,
           });
           promises.splice(
-            promises.findIndex((p) => p.then((r) => r.index === completed.index)),
-            1
+            promises.findIndex((p) =>
+              p.then((r) => r.index === completed.index),
+            ),
+            1,
           );
 
           while (results.has(completedIndex)) {
@@ -1518,7 +1533,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    */
   flatMapParallel<U>(
     fn: (value: T) => Promise<AsyncIterable<U> | Iterable<U>>,
-    concurrency = 10
+    concurrency = 10,
   ): AsyncIterflow<U> {
     const self = this;
     return new AsyncIterflow({
@@ -1544,9 +1559,9 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
             results.set(completed.index, completed.values);
             promises.splice(
               promises.findIndex((p) =>
-                p.then((r) => r.index === completed.index)
+                p.then((r) => r.index === completed.index),
               ),
-              1
+              1,
             );
 
             while (results.has(completedIndex)) {
@@ -1567,8 +1582,10 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
           const completed = await Promise.race(promises);
           results.set(completed.index, completed.values);
           promises.splice(
-            promises.findIndex((p) => p.then((r) => r.index === completed.index)),
-            1
+            promises.findIndex((p) =>
+              p.then((r) => r.index === completed.index),
+            ),
+            1,
           );
 
           while (results.has(completedIndex)) {
@@ -1625,7 +1642,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
 
           if (timeSinceLastEmit < intervalMs) {
             await new Promise((resolve) =>
-              setTimeout(resolve, intervalMs - timeSinceLastEmit)
+              setTimeout(resolve, intervalMs - timeSinceLastEmit),
             );
           }
 
@@ -1696,7 +1713,13 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * ```
    */
   catchError(
-    handler: (error: unknown) => T | AsyncIterable<T> | Iterable<T> | Promise<T | AsyncIterable<T> | Iterable<T>>
+    handler: (
+      error: unknown,
+    ) =>
+      | T
+      | AsyncIterable<T>
+      | Iterable<T>
+      | Promise<T | AsyncIterable<T> | Iterable<T>>,
   ): AsyncIterflow<T> {
     const self = this;
     return new AsyncIterflow({
@@ -1708,7 +1731,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
         } catch (error) {
           const fallback = await handler(error);
           if (
-            typeof fallback === 'object' &&
+            typeof fallback === "object" &&
             fallback !== null &&
             (Symbol.asyncIterator in fallback || Symbol.iterator in fallback)
           ) {
@@ -1788,7 +1811,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
    * ```
    */
   onError(
-    handler: (error: unknown, value?: T) => void | Promise<void>
+    handler: (error: unknown, value?: T) => void | Promise<void>,
   ): AsyncIterflow<T> {
     const self = this;
     return new AsyncIterflow({
@@ -1822,7 +1845,7 @@ export class AsyncIterflow<T> implements AsyncIterable<T> {
  * ```
  */
 export function asyncIter<T>(
-  source: AsyncIterable<T> | Iterable<T>
+  source: AsyncIterable<T> | Iterable<T>,
 ): AsyncIterflow<T> {
   if (Symbol.asyncIterator in source) {
     return new AsyncIterflow(source);
@@ -1854,7 +1877,7 @@ export namespace asyncIter {
    */
   export function zip<T, U>(
     iter1: AsyncIterable<T> | Iterable<T>,
-    iter2: AsyncIterable<U> | Iterable<U>
+    iter2: AsyncIterable<U> | Iterable<U>,
   ): AsyncIterflow<[T, U]> {
     return new AsyncIterflow({
       async *[Symbol.asyncIterator]() {
@@ -1905,7 +1928,7 @@ export namespace asyncIter {
   export function zipWith<T, U, R>(
     iter1: AsyncIterable<T> | Iterable<T>,
     iter2: AsyncIterable<U> | Iterable<U>,
-    fn: (a: T, b: U) => R | Promise<R>
+    fn: (a: T, b: U) => R | Promise<R>,
   ): AsyncIterflow<R> {
     return zip(iter1, iter2).map(async ([a, b]) => await fn(a, b));
   }
@@ -1925,12 +1948,12 @@ export namespace asyncIter {
   export function range(
     start: number,
     stop: number,
-    step: number
+    step: number,
   ): AsyncIterflow<number>;
   export function range(
     startOrStop: number,
     stop?: number,
-    step = 1
+    step = 1,
   ): AsyncIterflow<number> {
     const actualStart = stop === undefined ? 0 : startOrStop;
     const actualStop = stop === undefined ? startOrStop : stop;
@@ -1938,7 +1961,7 @@ export namespace asyncIter {
     return new AsyncIterflow({
       async *[Symbol.asyncIterator]() {
         if (step === 0) {
-          throw new Error("Range step cannot be zero");
+          validateNonZero(step, "step", "range");
         }
 
         if (step > 0) {
@@ -2006,7 +2029,7 @@ export namespace asyncIter {
             ? it[Symbol.asyncIterator]()
             : (async function* () {
                 yield* it as Iterable<T>;
-              })()
+              })(),
         );
         const active = new Set(iterators);
 
@@ -2046,11 +2069,7 @@ export namespace asyncIter {
     ...iterables: Array<AsyncIterable<T> | Iterable<T>>
   ): AsyncIterflow<T>;
   export function merge<T>(
-    ...args: (
-      | AsyncIterable<T>
-      | Iterable<T>
-      | ((a: T, b: T) => number)
-    )[]
+    ...args: (AsyncIterable<T> | Iterable<T> | ((a: T, b: T) => number))[]
   ): AsyncIterflow<T> {
     let compareFn: (a: T, b: T) => number;
     let iterables: Array<AsyncIterable<T> | Iterable<T>>;
@@ -2199,7 +2218,7 @@ export namespace asyncIter {
    * ```
    */
   export function fromGenerator<T>(
-    fn: () => AsyncGenerator<T>
+    fn: () => AsyncGenerator<T>,
   ): AsyncIterflow<T> {
     return new AsyncIterflow(fn());
   }
@@ -2235,9 +2254,7 @@ export namespace asyncIter {
    * await asyncIter.fromPromises(promises).map(r => r.json()).toArray();
    * ```
    */
-  export function fromPromises<T>(
-    promises: Promise<T>[]
-  ): AsyncIterflow<T> {
+  export function fromPromises<T>(promises: Promise<T>[]): AsyncIterflow<T> {
     return new AsyncIterflow({
       async *[Symbol.asyncIterator]() {
         const pending = new Set(promises);

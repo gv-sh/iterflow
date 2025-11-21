@@ -41,7 +41,7 @@ function analyticsMiddleware(): Middleware {
 
     // Analyze recent requests
     const recentRequests = iter(requestStore)
-      .takeLast(100)
+      .toArray().slice(-100)
       .toArray();
 
     const analytics = {

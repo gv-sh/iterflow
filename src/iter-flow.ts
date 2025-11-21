@@ -1,4 +1,4 @@
-import { validateRange, validatePositiveInteger } from './validation.js';
+import { validateRange, validatePositiveInteger } from "./validation.js";
 
 /**
  * A fluent interface wrapper for working with iterators and iterables.
@@ -324,7 +324,7 @@ export class IterFlow<T> implements Iterable<T> {
       *[Symbol.iterator]() {
         const buffer = Array.from(self);
         buffer.sort((a, b) => {
-          if (typeof a === 'number' && typeof b === 'number') {
+          if (typeof a === "number" && typeof b === "number") {
             return a - b;
           }
           return String(a).localeCompare(String(b));
@@ -581,7 +581,7 @@ export class IterFlow<T> implements Iterable<T> {
    * ```
    */
   percentile(this: IterFlow<number>, p: number): number | undefined {
-    validateRange(p, 0, 100, 'percentile', 'percentile');
+    validateRange(p, 0, 100, "percentile", "percentile");
 
     const values = this.toArray();
     if (values.length === 0) return undefined;
@@ -657,7 +657,7 @@ export class IterFlow<T> implements Iterable<T> {
    * ```
    */
   quartiles(
-    this: IterFlow<number>
+    this: IterFlow<number>,
   ): { Q1: number; Q2: number; Q3: number } | undefined {
     const values = this.toArray();
     if (values.length === 0) return undefined;
@@ -758,7 +758,7 @@ export class IterFlow<T> implements Iterable<T> {
    */
   covariance(
     this: IterFlow<number>,
-    other: Iterable<number>
+    other: Iterable<number>,
   ): number | undefined {
     const values1 = this.toArray();
     const values2 = Array.from(other);
@@ -771,10 +771,8 @@ export class IterFlow<T> implements Iterable<T> {
       return undefined;
     }
 
-    const mean1 =
-      values1.reduce((sum, val) => sum + val, 0) / values1.length;
-    const mean2 =
-      values2.reduce((sum, val) => sum + val, 0) / values2.length;
+    const mean1 = values1.reduce((sum, val) => sum + val, 0) / values1.length;
+    const mean2 = values2.reduce((sum, val) => sum + val, 0) / values2.length;
 
     let covariance = 0;
     for (let i = 0; i < values1.length; i++) {
@@ -803,7 +801,7 @@ export class IterFlow<T> implements Iterable<T> {
    */
   correlation(
     this: IterFlow<number>,
-    other: Iterable<number>
+    other: Iterable<number>,
   ): number | undefined {
     const values1 = this.toArray();
     const values2 = Array.from(other);
@@ -816,10 +814,8 @@ export class IterFlow<T> implements Iterable<T> {
       return undefined;
     }
 
-    const mean1 =
-      values1.reduce((sum, val) => sum + val, 0) / values1.length;
-    const mean2 =
-      values2.reduce((sum, val) => sum + val, 0) / values2.length;
+    const mean1 = values1.reduce((sum, val) => sum + val, 0) / values1.length;
+    const mean2 = values2.reduce((sum, val) => sum + val, 0) / values2.length;
 
     let covariance = 0;
     let variance1 = 0;
@@ -840,9 +836,7 @@ export class IterFlow<T> implements Iterable<T> {
       return undefined;
     }
 
-    return (
-      covariance / (values1.length * stdDev1 * stdDev2)
-    );
+    return covariance / (values1.length * stdDev1 * stdDev2);
   }
 
   // Windowing operations
@@ -860,7 +854,7 @@ export class IterFlow<T> implements Iterable<T> {
    * ```
    */
   window(size: number): IterFlow<T[]> {
-    validatePositiveInteger(size, 'size', 'window');
+    validatePositiveInteger(size, "size", "window");
 
     const self = this;
     return new IterFlow({
@@ -902,7 +896,7 @@ export class IterFlow<T> implements Iterable<T> {
    * ```
    */
   chunk(size: number): IterFlow<T[]> {
-    validatePositiveInteger(size, 'size', 'chunk');
+    validatePositiveInteger(size, "size", "chunk");
 
     const self = this;
     return new IterFlow({
@@ -1245,6 +1239,23 @@ export class IterFlow<T> implements Iterable<T> {
       }
     }
     return true;
+  }
+
+  /**
+   * Executes a function for each element in the iterator.
+   * This is a terminal operation that consumes the entire iterator.
+   *
+   * @param fn - Function to execute for each element
+   * @example
+   * ```typescript
+   * iter([1, 2, 3]).forEach(x => console.log(x));
+   * // Logs: 1, 2, 3
+   * ```
+   */
+  forEach(fn: (value: T) => void): void {
+    for (const value of this) {
+      fn(value);
+    }
   }
 
   /**

@@ -44,7 +44,7 @@ export function takeExample() {
 export function skipExample() {
   const numbers = [1, 2, 3, 4, 5];
   const afterTwo = iter(numbers)
-    .skip(2)
+    .drop(2)
     .toArray();
   console.log('After skipping 2:', afterTwo); // [3, 4, 5]
 }

@@ -139,7 +139,7 @@ function createBatchProcessor<T>(batchSize: number) {
 // Example: Windowing stream for time series
 function createWindowingStream<T>(windowSize: number, step?: number) {
   return createIterflowTransform<T, T[]>(iter =>
-    iter.window(windowSize, step)
+    iter.window(windowSize)
   );
 }
 

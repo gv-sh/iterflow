@@ -116,7 +116,7 @@ async function analyzeSensorData(data: SensorData[]) {
 
   // Create windowed analysis
   const windows = iter(data)
-    .window(5, 2)
+    .window(5)
     .map(window => ({
       avgTemp: iter(window).map(d => d.temperature).mean(),
       avgHumidity: iter(window).map(d => d.humidity).mean(),
